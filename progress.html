@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress | SkillVault</title>
+
+<link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  background:#f4f6f9;
+}
+
+.navbar{
+  height:60px;
+  background:#1e1e2f;
+  color:#4db5ff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 25px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.navbar button{
+  background:#4db5ff;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
+}
+
+.main{
+  padding:30px;
+  max-width:1000px;
+  margin:auto;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  margin-bottom:30px;
+}
+
+.summary-box{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.summary-box h3{
+  font-size:14px;
+  color:#777;
+}
+
+.summary-box p{
+  font-size:28px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.skill-section{
+  background:white;
+  padding:25px;
+  border-radius:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.skill{
+  margin-bottom:20px;
+}
+
+.skill-header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+  font-weight:600;
+}
+
+.progress-bar{
+  background:#ddd;
+  height:12px;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.progress-bar span{
+  display:block;
+  height:100%;
+  width:0;
+  background:#4db5ff;
+  transition:1s ease;
+}
+
+.status{
+  font-size:12px;
+  margin-top:5px;
+}
+
+.status.completed{
+  color:green;
+}
+
+.status.progress{
+  color:#4db5ff;
+}
+
+.status.low{
+  color:red;
+}
+
+@media(max-width:600px){
+  .navbar{
+    flex-direction:column;
+    height:auto;
+    gap:10px;
+    padding:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  SkillVault - Progress
+  <button onclick="goDashboard()">← Dashboard</button>
+</div>
+
+<div class="main">
+
+  <div class="summary">
+    <div class="summary-box">
+      <h3>Total Skills</h3>
+      <p id="totalSkills">0</p>
+    </div>
+    <div class="summary-box">
+      <h3>Completed</h3>
+      <p id="completedSkills">0</p>
+    </div>
+    <div class="summary-box">
+      <h3>In Progress</h3>
+      <p id="progressSkills">0</p>
+    </div>
+    <div class="summary-box">
+      <h3>Overall Progress</h3>
+      <p id="overallProgress">0%</p>
+    </div>
+  </div>
+
+  <div class="skill-section">
+    <h2>Skill Progress</h2><br>
+    <div id="skillContainer"></div>
+  </div>
+
+</div>
+
+<script>
+
+/* Skill Data */
+const skills = [
+  { name: "HTML", percent: 90 },
+  { name: "CSS", percent: 75 },
+  { name: "JavaScript", percent: 60 },
+  { name: "React", percent: 40 }
+];
+
+/* Validate Percentage */
+function isValidPercent(value){
+  return typeof value === "number" && value >= 0 && value <= 100;
+}
+
+window.onload = function(){
+
+  const container = document.getElementById("skillContainer");
+
+  let total = skills.length;
+  let completed = 0;
+  let inProgress = 0;
+  let totalPercent = 0;
+
+  skills.forEach(skill => {
+
+    if(!isValidPercent(skill.percent)){
+      alert("Invalid percentage for " + skill.name);
+      return;
+    }
+
+    totalPercent += skill.percent;
+
+    let statusClass = "";
+    let statusText = "";
+
+    if(skill.percent >= 80){
+      completed++;
+      statusText = "✔ Completed";
+      statusClass = "completed";
+    }else if(skill.percent >= 40){
+      inProgress++;
+      statusText = "⏳ In Progress";
+      statusClass = "progress";
+    }else{
+      inProgress++;
+      statusText = "⚠ Needs Improvement";
+      statusClass = "low";
+    }
+
+    const skillDiv = document.createElement("div");
+    skillDiv.className = "skill";
+
+    skillDiv.innerHTML = `
+      <div class="skill-header">
+        <span>${skill.name}</span>
+        <span>${skill.percent}%</span>
+      </div>
+      <div class="progress-bar">
+        <span data-value="${skill.percent}"></span>
+      </div>
+      <div class="status ${statusClass}">${statusText}</div>
+    `;
+
+    container.appendChild(skillDiv);
+  });
+
+  // Animate Bars
+  setTimeout(()=>{
+    document.querySelectorAll(".progress-bar span").forEach(bar=>{
+      bar.style.width = bar.dataset.value + "%";
+    });
+  },200);
+
+  // Calculate Overall
+  const overall = Math.round(totalPercent / total);
+
+  document.getElementById("totalSkills").textContent = total;
+  document.getElementById("completedSkills").textContent = completed;
+  document.getElementById("progressSkills").textContent = inProgress;
+  document.getElementById("overallProgress").textContent = overall + "%";
+
+};
+
+/* Dashboard Button */
+function goDashboard(){
+  window.location.href = "dashboard.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<meta name="theme-color" content="#1e1e2f">
+<title>Learning Roadmap | SkillVault</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#1e1e2f,#4db5ff);
+  color:white;
+}
+
+.navbar{
+  padding:18px 30px;
+  font-size:22px;
+  font-weight:bold;
+  background:rgba(0,0,0,0.4);
+}
+
+.container{
+  padding:40px 10%;
+}
+
+.overall-progress{
+  margin-bottom:40px;
+}
+
+.overall-progress h3{
+  margin-bottom:10px;
+}
+
+.progress-bar{
+  background:rgba(255,255,255,0.3);
+  height:12px;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-bar span{
+  display:block;
+  height:100%;
+  width:0;
+  background:#28c76f;
+  transition:1s;
+}
+
+.step{
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(15px);
+  padding:25px;
+  border-radius:20px;
+  margin-bottom:30px;
+  transition:0.3s;
+}
+
+.step.locked{
+  opacity:0.5;
+}
+
+.step h2{
+  margin-bottom:5px;
+}
+
+.meta{
+  font-size:13px;
+  opacity:0.9;
+  margin-bottom:10px;
+}
+
+.details{
+  font-size:14px;
+  margin-bottom:15px;
+}
+
+.topic{
+  display:inline-block;
+  background:white;
+  color:#1e1e2f;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:12px;
+  margin:4px 4px 0 0;
+}
+
+.actions{
+  margin-top:15px;
+}
+
+.actions button{
+  padding:8px 15px;
+  border:none;
+  border-radius:20px;
+  margin-right:10px;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.start-btn{
+  background:white;
+  color:#1e1e2f;
+}
+
+.complete-btn{
+  background:#28c76f;
+  color:white;
+}
+
+.actions button:disabled{
+  background:gray;
+  cursor:not-allowed;
+}
+
+.error{
+  color:#ff6b6b;
+  font-size:13px;
+  margin-top:8px;
+}
+
+.back-btn{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.back-btn button{
+  padding:10px 18px;
+  border:none;
+  border-radius:25px;
+  background:white;
+  color:#1e1e2f;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">SkillVault – Learning Roadmap</div>
+
+<div class="container">
+
+  <div class="overall-progress">
+    <h3>Overall Course Progress</h3>
+    <div class="progress-bar"><span id="overallBar"></span></div>
+  </div>
+
+  <div class="step" data-step="1">
+    <h2>HTML Fundamentals</h2>
+    <div class="meta">Duration: 1 Week | Level: Beginner</div>
+    <div class="details">
+      Learn semantic tags, forms, tables, multimedia elements and build structured web pages.
+    </div>
+    <div>
+      <span class="topic">Tags</span>
+      <span class="topic">Forms</span>
+      <span class="topic">Tables</span>
+      <span class="topic">Semantic</span>
+    </div>
+    <div class="actions">
+      <button class="start-btn" onclick="startStep(1)">Start</button>
+      <button class="complete-btn" onclick="completeStep(1)">Complete</button>
+      <div class="error" id="error1"></div>
+    </div>
+  </div>
+
+  <div class="step locked" data-step="2">
+    <h2>CSS Styling</h2>
+    <div class="meta">Duration: 2 Weeks | Level: Beginner</div>
+    <div class="details">
+      Learn layouts, flexbox, grid, animations and responsive design.
+    </div>
+    <div>
+      <span class="topic">Flexbox</span>
+      <span class="topic">Grid</span>
+      <span class="topic">Media Queries</span>
+      <span class="topic">Animation</span>
+    </div>
+    <div class="actions">
+      <button class="start-btn" onclick="startStep(2)">Start</button>
+      <button class="complete-btn" onclick="completeStep(2)">Complete</button>
+      <div class="error" id="error2"></div>
+    </div>
+  </div>
+
+  <div class="step locked" data-step="3">
+    <h2>JavaScript</h2>
+    <div class="meta">Duration: 3 Weeks | Level: Intermediate</div>
+    <div class="details">
+      Learn DOM manipulation, events, async programming and APIs.
+    </div>
+    <div>
+      <span class="topic">DOM</span>
+      <span class="topic">Events</span>
+      <span class="topic">Async/Await</span>
+      <span class="topic">API</span>
+    </div>
+    <div class="actions">
+      <button class="start-btn" onclick="startStep(3)">Start</button>
+      <button class="complete-btn" onclick="completeStep(3)">Complete</button>
+      <div class="error" id="error3"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="back-btn">
+  <button onclick="history.back()">← Back</button>
+</div>
+
+<script>
+let progressData = JSON.parse(localStorage.getItem("roadmapProgress")) || {
+  started: [],
+  completed: []
+};
+
+function updateUI(){
+  const totalSteps = 3;
+  const completedCount = progressData.completed.length;
+  document.getElementById("overallBar").style.width =
+    (completedCount/totalSteps)*100 + "%";
+
+  document.querySelectorAll(".step").forEach(step=>{
+    const stepNum = parseInt(step.dataset.step);
+
+    if(progressData.completed.includes(stepNum)){
+      step.classList.remove("locked");
+    }
+
+    if(progressData.completed.includes(stepNum-1) || stepNum===1){
+      step.classList.remove("locked");
+    }
+  });
+}
+
+function startStep(num){
+  if(num>1 && !progressData.completed.includes(num-1)){
+    document.getElementById("error"+num).innerText =
+      "Complete previous step first";
+    return;
+  }
+  progressData.started.push(num);
+  localStorage.setItem("roadmapProgress", JSON.stringify(progressData));
+  document.getElementById("error"+num).innerText = "Started successfully";
+}
+
+function completeStep(num){
+  if(!progressData.started.includes(num)){
+    document.getElementById("error"+num).innerText =
+      "You must start this step first";
+    return;
+  }
+  if(!progressData.completed.includes(num)){
+    progressData.completed.push(num);
+  }
+  localStorage.setItem("roadmapProgress", JSON.stringify(progressData));
+  document.getElementById("error"+num).innerText = "Completed successfully";
+  updateUI();
+}
+
+updateUI();
+</script>
+
+</body>
+</html>

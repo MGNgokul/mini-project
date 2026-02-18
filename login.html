@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<meta name="theme-color" content="#1e1e2f">
+<title>Login | SkillVault</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(-45deg,#1e1e2f,#4db5ff,#203a43,#0f2027);
+  background-size:400% 400%;
+  animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+.login-box{
+  width:380px;
+  max-width:95%;
+  padding:40px 30px;
+  border-radius:25px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(18px);
+  box-shadow:0 25px 50px rgba(0,0,0,0.4);
+  color:white;
+  animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(30px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.logo span{
+  color:#4db5ff;
+}
+
+.login-box p{
+  text-align:center;
+  font-size:14px;
+  margin-bottom:25px;
+  opacity:0.9;
+}
+
+.input-group{
+  margin-bottom:18px;
+}
+
+.input-group label{
+  font-size:13px;
+}
+
+.input-group input{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border:none;
+  border-radius:12px;
+  outline:none;
+  font-size:14px;
+}
+
+.input-group input:focus{
+  box-shadow:0 0 0 2px #4db5ff;
+}
+
+.password-box{
+  position:relative;
+}
+
+.password-box span{
+  position:absolute;
+  right:12px;
+  top:38px;
+  cursor:pointer;
+  font-size:13px;
+  color:#4db5ff;
+}
+
+.error{
+  font-size:12px;
+  color:#ff6b6b;
+  margin-top:5px;
+}
+
+.login-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#4db5ff;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+}
+
+.login-btn:hover{
+  background:white;
+  color:#1e1e2f;
+}
+
+.links{
+  margin-top:18px;
+  text-align:center;
+  font-size:13px;
+}
+
+.links a{
+  color:#4db5ff;
+  text-decoration:none;
+}
+
+@media(max-width:480px){
+  .login-box{
+    padding:30px 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+  <div class="logo">Skill<span>Vault</span></div>
+  <p>Login to track your skills and progress</p>
+
+  <form onsubmit="return validateForm()">
+    <div class="input-group">
+      <label>Email</label>
+      <input type="text" id="email" placeholder="Enter email">
+      <div class="error" id="emailError"></div>
+    </div>
+
+    <div class="input-group password-box">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password">
+      <div class="error" id="passwordError"></div>
+    </div>
+
+    <button class="login-btn" type="submit">Login</button>
+  </form>
+
+  <div class="links">
+    <a href="#">Forgot Password?</a> |
+    <a href="register.html">Create Account</a>
+  </div>
+</div>
+
+<script>
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
+
+/* Real-time validation */
+emailInput.addEventListener("input", function(){
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  if(emailInput.value.trim()===""){
+    emailError.textContent="Email is required";
+  }else if(!pattern.test(emailInput.value.trim())){
+    emailError.textContent="Enter valid email format";
+  }else{
+    emailError.textContent="";
+  }
+});
+
+passwordInput.addEventListener("input", function(){
+  const strong = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
+
+  if(passwordInput.value.trim()===""){
+    passwordError.textContent="Password is required";
+  }else if(!strong.test(passwordInput.value.trim())){
+    passwordError.textContent="Min 6 chars, 1 uppercase, 1 number";
+  }else{
+    passwordError.textContent="";
+  }
+});
+
+/* Submit Validation */
+function validateForm(){
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  const strong = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  emailError.textContent = "";
+  passwordError.textContent = "";
+
+  if(email === ""){
+    emailError.textContent = "Email is required";
+    shakeBox();
+    return false;
+  }
+
+  if(password === ""){
+    passwordError.textContent = "Password is required";
+    shakeBox();
+    return false;
+  }
+
+  if(!pattern.test(email)){
+    emailError.textContent = "Enter valid email format";
+    shakeBox();
+    return false;
+  }
+
+  if(!strong.test(password)){
+    passwordError.textContent = "Invalid password format";
+    shakeBox();
+    return false;
+  }
+
+  let users = JSON.parse(localStorage.getItem("skillvaultUsers")) || [];
+
+  let validUser = users.find(user =>
+    user.email === email && user.password === password
+  );
+
+  if(validUser){
+
+      const userData = {
+        email: validUser.email,
+        name: validUser.name,
+        role: "student",
+        loginTime: new Date().toLocaleString(),
+        isLoggedIn: true
+      };
+
+      localStorage.setItem("skillvaultUser",
+        JSON.stringify(userData));
+
+      alert("Login Successful!");
+      window.location.href="dashboard.html";
+
+  }else{
+      passwordError.textContent="Invalid email or password";
+      shakeBox();
+  }
+
+  return false;
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>SkillVault</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<meta name="theme-color" content="#1e1e2f">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(-45deg,#1e1e2f,#4db5ff,#203a43,#0f2027);
+  background-size:400% 400%;
+  animation:gradientBG 12s ease infinite;
+  overflow-x:hidden;
+}
+
+@keyframes gradientBG{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 30px;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(12px);
+  position:sticky;
+  top:0;
+  z-index:1000;
+  animation:fadeDown 1s ease-in-out;
+}
+
+@keyframes fadeDown{
+  from{opacity:0; transform:translateY(-20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+}
+
+.logo img{
+  width:42px;
+  margin-right:10px;
+  border-radius:10px;
+}
+
+.logo span{
+  color:#4db5ff;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.nav-links a{
+  color:white;
+  margin-left:25px;
+  text-decoration:none;
+  font-weight:500;
+  transition:0.3s;
+  position:relative;
+}
+
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-5px;
+  width:0%;
+  height:2px;
+  background:#4db5ff;
+  transition:0.3s;
+}
+
+.nav-links a:hover::after{
+  width:100%;
+}
+
+.container{
+  min-height:calc(100vh - 70px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.card{
+  width:100%;
+  max-width:850px;
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(20px);
+  border-radius:30px;
+  padding:60px;
+  text-align:center;
+  color:white;
+  box-shadow:0 30px 60px rgba(0,0,0,0.4);
+  animation:fadeUp 1.2s ease-in-out;
+  transition:0.4s;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(40px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.card:hover{
+  transform:translateY(-10px);
+}
+
+.card h1{
+  font-size:50px;
+  margin-bottom:20px;
+}
+
+.card p{
+  font-size:18px;
+  margin-bottom:40px;
+  opacity:0.9;
+}
+
+.btn{
+  padding:15px 45px;
+  font-size:16px;
+  border:none;
+  border-radius:50px;
+  background:#4db5ff;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 0 15px rgba(77,181,255,0.6);
+}
+
+.btn:hover{
+  background:white;
+  color:#1e1e2f;
+  transform:scale(1.05);
+  box-shadow:0 0 25px rgba(255,255,255,0.8);
+}
+
+.circle{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,0.1);
+  animation:float 6s infinite ease-in-out;
+}
+
+.circle1{
+  width:120px;
+  height:120px;
+  top:20%;
+  left:10%;
+}
+
+.circle2{
+  width:180px;
+  height:180px;
+  bottom:15%;
+  right:10%;
+  animation-delay:2s;
+}
+
+@keyframes float{
+  0%{transform:translateY(0px);}
+  50%{transform:translateY(-25px);}
+  100%{transform:translateY(0px);}
+}
+
+@media(max-width:768px){
+  .card{
+    padding:35px;
+  }
+  .card h1{
+    font-size:32px;
+  }
+  .card p{
+    font-size:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+<div class="navbar">
+  <div class="logo">
+    <img src="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+    <span>SkillVault</span>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h1>Track Skills. Build Career.</h1>
+    <p>Your personal dashboard to learn, track, and grow your skills</p>
+    <a href="login.html">
+      <button class="btn">Get Started</button>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

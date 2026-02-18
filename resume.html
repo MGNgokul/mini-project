@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<meta name="theme-color" content="#1e1e2f">
+<title>Resume Preview | SkillVault</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI, sans-serif;
+  background:#f4f6f9;
+}
+
+.resume-grid{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  min-height:100vh;
+}
+
+.resume-sidebar{
+  background:#1e1e2f;
+  color:white;
+  padding:25px;
+}
+.resume-sidebar h2{
+  color:#4db5ff;
+}
+.resume-sidebar p{
+  font-size:14px;
+  opacity:.8;
+}
+.resume-sidebar a{
+  display:block;
+  margin-top:15px;
+  color:white;
+  text-decoration:none;
+  font-size:14px;
+}
+.resume-sidebar a:hover{
+  color:#4db5ff;
+}
+
+.resume-main{
+  background:white;
+  padding:40px;
+}
+
+.resume-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:2px solid #eee;
+  padding-bottom:15px;
+}
+.resume-header h1{
+  margin:0;
+}
+.resume-header button{
+  background:#4db5ff;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.section{
+  margin-top:30px;
+}
+.section h3{
+  border-left:5px solid #4db5ff;
+  padding-left:10px;
+  margin-bottom:15px;
+}
+.skill-tags span{
+  display:inline-block;
+  background:#e6f2ff;
+  padding:6px 10px;
+  border-radius:20px;
+  margin:5px;
+  font-size:13px;
+}
+
+.exp{
+  margin-bottom:15px;
+}
+
+.back-btn{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+}
+.back-btn button{
+  padding:8px 14px;
+  border:none;
+  border-radius:12px;
+  background:#1e1e2f;
+  color:white;
+  cursor: pointer;
+}
+.back-btn button:hover{
+  background:#4db5ff;
+
+@media(max-width:768px){
+  .resume-grid{
+    grid-template-columns:1fr;
+  }
+  .resume-sidebar{
+    display:none;
+  }
+}
+</style>
+
+<script>
+function downloadResume(){
+  alert("PDF Download feature can be integrated here!");
+}
+</script>
+
+</head>
+<body>
+
+<div class="resume-grid">
+
+  <div class="resume-sidebar">
+    <h2>SkillVault</h2>
+    <p>Resume Tools</p>
+    <a href="#">Edit Resume</a>
+    <a href="#">Add Skill</a>
+    <a href="#">Attach Certificate</a>
+    <a href="#">Download PDF</a>
+    <a href="#">Share Link</a>
+  </div>
+
+  <div class="resume-main">
+
+    <div class="resume-header">
+      <div>
+        <h1>Gokulnath</h1>
+        <p>Frontend Developer</p>
+      </div>
+      <button onclick="downloadResume()">Download PDF</button>
+    </div>
+
+    <div class="section">
+      <h3>Profile Summary</h3>
+      <p>Passionate frontend developer skilled in HTML, CSS, JavaScript with experience in building responsive and interactive web applications.</p>
+    </div>
+
+    <div class="section">
+      <h3>Skills</h3>
+      <div class="skill-tags">
+        <span>HTML</span>
+        <span>CSS</span>
+        <span>JavaScript</span>
+        <span>React</span>
+        <span>Git</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Experience</h3>
+      <div class="exp">
+        <strong>Frontend Intern</strong> – SkillVault  
+        <p>Worked on dashboards, responsive layouts and UI components.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Education</h3>
+      <p>B.Tech – Computer Science</p>
+    </div>
+
+    <div class="section">
+      <h3>Certificates</h3>
+      <p>✔ HTML & CSS Certificate<br>✔ JavaScript Basics</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="back-btn">
+  <button onclick="history.back()">← Back</button>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+
+<title>Profile | SkillVault</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(-45deg,#1e1e2f,#4db5ff,#203a43,#0f2027);
+  background-size:400% 400%;
+  animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+.navbar{
+  background:#1e1e2f;
+  padding:15px 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:bold;
+  color:#4db5ff;
+}
+
+.profile-card{
+  max-width:900px;
+  margin:40px auto;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(18px);
+  border-radius:25px;
+  box-shadow:0 25px 50px rgba(0,0,0,0.4);
+  color:white;
+  overflow:hidden;
+}
+
+.profile-header{
+  text-align:center;
+  padding:30px;
+  background:linear-gradient(120deg,#6c63ff,#4db5ff);
+}
+
+.profile-header img{
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  border:4px solid white;
+  object-fit:cover;
+}
+
+.profile-header input{
+  margin-top:10px;
+  color:white;
+}
+
+.profile-body{
+  padding:30px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+}
+
+.field label{
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.field input{
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  outline:none;
+}
+
+.skills{
+  grid-column:span 2;
+}
+
+.skill-tags span{
+  display:inline-block;
+  background:white;
+  color:#1e1e2f;
+  padding:6px 12px;
+  border-radius:20px;
+  margin:5px;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.actions{
+  grid-column:span 2;
+  text-align:center;
+}
+
+.actions button{
+  padding:12px 30px;
+  border:none;
+  border-radius:25px;
+  background:#4db5ff;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.actions button:hover{
+  background:white;
+  color:#1e1e2f;
+}
+
+.error{
+  color:#ff6b6b;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.success{
+  text-align:center;
+  margin-top:15px;
+  color:#00ffcc;
+}
+
+@media(max-width:700px){
+  .profile-body{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <div class="logo">SkillVault - Profile</div>
+</div>
+
+<div class="profile-card">
+
+<div class="profile-header">
+  <img id="profileImg" src="https://static.vecteezy.com/system/resources/previews/020/292/860/original/app-profile-icon-male-online-dp-graphic-icon-free-vector.jpg">
+  <br>
+  <input type="file" onchange="previewImage(event)">
+  <h2 id="profileName">Your Name</h2>
+</div>
+
+<div class="profile-body">
+
+<div class="field">
+  <label>Email</label>
+  <input type="email" id="email">
+  <div class="error" id="emailError"></div>
+</div>
+
+<div class="field">
+  <label>Phone</label>
+  <input type="text" id="phone">
+  <div class="error" id="phoneError"></div>
+</div>
+
+<div class="field">
+  <label>College</label>
+  <input type="text" id="college">
+  <div class="error" id="collegeError"></div>
+</div>
+
+<div class="field">
+  <label>Career Goal</label>
+  <input type="text" id="goal">
+  <div class="error" id="goalError"></div>
+</div>
+
+<div class="skills">
+  <label><strong>Add Skill</strong></label>
+  <input type="text" id="skillInput" placeholder="Type skill">
+  <button onclick="addSkill()" type="button">Add</button>
+  <div class="skill-tags" id="skillTags"></div>
+</div>
+
+<div class="actions">
+  <button onclick="saveProfile()">Save Profile</button>
+  <div class="success" id="successMsg"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+
+let skills = [];
+
+window.onload = function(){
+  const stored = JSON.parse(localStorage.getItem("profileData"));
+  if(stored){
+    email.value = stored.email;
+    phone.value = stored.phone;
+    college.value = stored.college;
+    goal.value = stored.goal;
+    skills = stored.skills || [];
+    profileName.textContent = stored.name || "Your Name";
+    if(stored.image){
+      document.getElementById("profileImg").src = stored.image;
+    }
+    renderSkills();
+  }
+};
+
+function addSkill(){
+  const skill = skillInput.value.trim();
+  if(skill){
+    skills.push(skill);
+    skillInput.value="";
+    renderSkills();
+  }
+}
+
+function renderSkills(){
+  skillTags.innerHTML="";
+  skills.forEach((skill,index)=>{
+    skillTags.innerHTML += 
+    `<span onclick="removeSkill(${index})">${skill} ❌</span>`;
+  });
+}
+
+function removeSkill(index){
+  skills.splice(index,1);
+  renderSkills();
+}
+
+function saveProfile(){
+
+  document.querySelectorAll(".error").forEach(e=>e.textContent="");
+  successMsg.textContent="";
+
+  const emailPattern=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const phonePattern=/^[0-9]{10}$/;
+
+  let valid=true;
+
+  if(!emailPattern.test(email.value.trim())){
+    emailError.textContent="Enter valid email";
+    valid=false;
+  }
+
+  if(!phonePattern.test(phone.value.trim())){
+    phoneError.textContent="Enter 10 digit phone";
+    valid=false;
+  }
+
+  if(college.value.trim()===""){
+    collegeError.textContent="College required";
+    valid=false;
+  }
+
+  if(goal.value.trim()===""){
+    goalError.textContent="Career goal required";
+    valid=false;
+  }
+
+  if(!valid) return;
+
+  const profileData={
+    name: profileName.textContent,
+    email: email.value,
+    phone: phone.value,
+    college: college.value,
+    goal: goal.value,
+    skills: skills,
+    image: document.getElementById("profileImg").src
+  };
+
+  localStorage.setItem("profileData",
+    JSON.stringify(profileData));
+
+  successMsg.textContent="Profile Saved Successfully ✅";
+}
+
+function previewImage(event){
+  const reader=new FileReader();
+  reader.onload=function(){
+    document.getElementById("profileImg").src=reader.result;
+  }
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+</script>
+
+</body>
+</html>

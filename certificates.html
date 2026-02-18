@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<meta name="theme-color" content="#1e1e2f">
+<title>Certificates | SkillVault</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI, sans-serif;
+}
+body{
+  background:#f4f6f9;
+}
+
+.navbar{
+  height:60px;
+  background:#1e1e2f;
+  color:#4db5ff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 25px;
+  font-size:22px;
+  font-weight:bold;
+}
+.navbar a{
+  color:white;
+  text-decoration:none;
+  font-size:14px;
+  margin-left:15px;
+}
+
+.main{
+  padding:30px;
+}
+
+.filter{
+  display:flex;
+  gap:12px;
+  margin-bottom:25px;
+  flex-wrap:wrap;
+}
+.filter button{
+  padding:8px 16px;
+  border:none;
+  border-radius:20px;
+  background:#e0e0e0;
+  cursor:pointer;
+  font-size:13px;
+  transition:0.3s;
+}
+.filter button.active,
+.filter button:hover{
+  background:#4db5ff;
+  color:white;
+}
+
+.certificate{
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.12);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  transition:0.3s;
+}
+.certificate:hover{
+  transform:translateY(-5px);
+}
+.cert-info h3{
+  font-size:18px;
+}
+.cert-info p{
+  font-size:13px;
+  color:#777;
+  margin-top:5px;
+}
+.badge{
+  padding:4px 10px;
+  font-size:11px;
+  border-radius:12px;
+  display:inline-block;
+  margin-top:8px;
+}
+.completed{
+  background:#d4f7dc;
+  color:#1b7a2a;
+}
+.pending{
+  background:#fff3cd;
+  color:#856404;
+}
+
+.actions button{
+  padding:8px 14px;
+  border:none;
+  border-radius:10px;
+  font-size:12px;
+  cursor:pointer;
+  margin-left:8px;
+}
+.view{
+  background:#4db5ff;
+  color:white;
+}
+.download{
+  background:#1e1e2f;
+  color:white;
+}
+
+.back-btn{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+}
+.back-btn button{
+  padding:8px 14px;
+  font-size:13px;
+  border:none;
+  border-radius:12px;
+  background:#1e1e2f;
+  color:white;
+  cursor: pointer;
+}
+.back-btn button:hover{
+  background:#4db5ff;
+}
+
+@media(max-width:700px){
+  .certificate{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+  }
+  .actions{
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+  }
+}
+</style>
+
+<script>
+function filterCert(type){
+  document.querySelectorAll(".filter button").forEach(btn=>btn.classList.remove("active"));
+  event.target.classList.add("active");
+
+  document.querySelectorAll(".certificate").forEach(cert=>{
+    if(type==="all" || cert.classList.contains(type)){
+      cert.style.display="flex";
+    }else{
+      cert.style.display="none";
+    }
+  });
+}
+</script>
+
+</head>
+<body>
+
+<div class="navbar">
+  SkillVault Certificates
+  <div>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="resume.html">Resume</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="filter">
+    <button class="active" onclick="filterCert('all')">All</button>
+    <button onclick="filterCert('completed')">Completed</button>
+    <button onclick="filterCert('pending')">Pending</button>
+  </div>
+
+  <div class="certificate completed">
+    <div class="cert-info">
+      <h3>HTML & CSS Fundamentals</h3>
+      <p>Issued by FreeCodeCamp</p>
+      <span class="badge completed">Completed</span>
+    </div>
+    <div class="actions">
+      <button class="view">View</button>
+      <button class="download">Download</button>
+    </div>
+  </div>
+
+  <div class="certificate completed">
+    <div class="cert-info">
+      <h3>JavaScript Essentials</h3>
+      <p>Issued by Coursera</p>
+      <span class="badge completed">Completed</span>
+    </div>
+    <div class="actions">
+      <button class="view">View</button>
+      <button class="download">Download</button>
+    </div>
+  </div>
+
+  <div class="certificate pending">
+    <div class="cert-info">
+      <h3>React Developer</h3>
+      <p>Issued by Udemy</p>
+      <span class="badge pending">Pending</span>
+    </div>
+    <div class="actions">
+      <button class="view">View</button>
+      <button class="download">Download</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="back-btn">
+  <button onclick="history.back()">← Back</button>
+</div>
+
+</body>
+</html>

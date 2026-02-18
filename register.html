@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+
+<title>Register | SkillVault</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(-45deg,#1e1e2f,#4db5ff,#203a43,#0f2027);
+  background-size:400% 400%;
+  animation:bg 12s ease infinite;
+}
+
+@keyframes bg{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+.register-box{
+  width:400px;
+  max-width:95%;
+  padding:40px 30px;
+  border-radius:25px;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(18px);
+  box-shadow:0 25px 50px rgba(0,0,0,0.4);
+  color:white;
+  animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(30px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes shake {
+  0%{transform:translateX(0);}
+  25%{transform:translateX(-5px);}
+  50%{transform:translateX(5px);}
+  75%{transform:translateX(-5px);}
+  100%{transform:translateX(0);}
+}
+
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.logo span{
+  color:#4db5ff;
+}
+
+.register-box p{
+  text-align:center;
+  font-size:14px;
+  margin-bottom:25px;
+  opacity:0.9;
+}
+
+.input-group{
+  margin-bottom:18px;
+}
+
+.input-group label{
+  font-size:13px;
+}
+
+.input-group input{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border:none;
+  border-radius:12px;
+  outline:none;
+  font-size:14px;
+}
+
+.input-group input:focus{
+  box-shadow:0 0 0 2px #4db5ff;
+}
+
+.error{
+  font-size:12px;
+  color:#ff6b6b;
+  margin-top:5px;
+}
+
+.success{
+  font-size:12px;
+  color:#4caf50;
+  margin-top:5px;
+}
+
+.register-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#4db5ff;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+}
+
+.register-btn:hover{
+  background:white;
+  color:#1e1e2f;
+}
+
+.links{
+  margin-top:18px;
+  text-align:center;
+  font-size:13px;
+}
+
+.links a{
+  color:#4db5ff;
+  text-decoration:none;
+}
+
+@media(max-width:480px){
+  .register-box{
+    padding:30px 20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="register-box">
+  <div class="logo">Skill<span>Vault</span></div>
+  <p>Create your account to start learning</p>
+
+  <form onsubmit="return registerUser()">
+
+    <div class="input-group">
+      <label>Full Name</label>
+      <input type="text" id="name" placeholder="Enter full name">
+      <div class="error" id="nameError"></div>
+    </div>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="text" id="email" placeholder="Enter email">
+      <div class="error" id="emailError"></div>
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password">
+      <div class="error" id="passwordError"></div>
+    </div>
+
+    <div class="input-group">
+      <label>Confirm Password</label>
+      <input type="password" id="confirmPassword" placeholder="Confirm password">
+      <div class="error" id="confirmError"></div>
+    </div>
+
+    <button class="register-btn" type="submit">Register</button>
+    <div class="success" id="successMsg"></div>
+
+  </form>
+
+  <div class="links">
+    Already have account? <a href="login.html">Login</a>
+  </div>
+</div>
+
+<script>
+
+function registerUser(){
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+  const nameError = document.getElementById("nameError");
+  const emailError = document.getElementById("emailError");
+  const passwordError = document.getElementById("passwordError");
+  const confirmError = document.getElementById("confirmError");
+  const successMsg = document.getElementById("successMsg");
+
+  nameError.textContent="";
+  emailError.textContent="";
+  passwordError.textContent="";
+  confirmError.textContent="";
+  successMsg.textContent="";
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const strongPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
+
+  let isValid = true;
+
+  if(name===""){
+    nameError.textContent="Full name is required";
+    isValid=false;
+  }
+
+  if(!emailPattern.test(email)){
+    emailError.textContent="Enter valid email address";
+    isValid=false;
+  }
+
+  if(!strongPassword.test(password)){
+    passwordError.textContent="Min 6 chars, 1 uppercase, 1 number";
+    isValid=false;
+  }
+
+  if(password !== confirmPassword){
+    confirmError.textContent="Passwords do not match";
+    isValid=false;
+  }
+
+  if(!isValid){
+    shakeBox();
+    return false;
+  }
+
+  let users = JSON.parse(localStorage.getItem("skillvaultUsers")) || [];
+
+  if(users.find(user => user.email === email)){
+    emailError.textContent="Email already registered";
+    return false;
+  }
+
+  users.push({
+    name:name,
+    email:email,
+    password:password
+  });
+
+  localStorage.setItem("skillvaultUsers", JSON.stringify(users));
+
+  successMsg.textContent="Registration successful! Redirecting to login...";
+
+  setTimeout(()=>{
+    window.location.href="login.html";
+  },1500);
+
+  return false;
+}
+
+function shakeBox(){
+  const box=document.querySelector(".register-box");
+  box.style.animation="none";
+  box.offsetHeight;
+  box.style.animation="shake 0.3s";
+}
+
+</script>
+
+</body>
+</html>

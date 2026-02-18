@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Help & Support | SkillVault</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+body{
+  background:#f4f6f9;
+}
+
+.top-nav{
+  background:#1e1e2f;
+  padding:15px 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{
+  color:#4db5ff;
+  font-size:22px;
+  font-weight:bold;
+}
+.top-nav a{
+  color:white;
+  margin-left:20px;
+  text-decoration:none;
+}
+
+.layout{
+  display:flex;
+  min-height:calc(100vh - 60px);
+}
+
+.sidebar{
+  width:240px;
+  background:white;
+  box-shadow:2px 0 10px rgba(0,0,0,0.1);
+}
+.sidebar a{
+  display:block;
+  padding:15px 20px;
+  text-decoration:none;
+  color:#1e1e2f;
+  transition:0.3s;
+}
+.sidebar a:hover,
+.sidebar a.active{
+  background:#e6f2ff;
+  color:#4db5ff;
+}
+
+.main{
+  flex:1;
+  padding:30px;
+}
+
+.help-header{
+  background:linear-gradient(120deg,#4db5ff,#6c63ff);
+  color:white;
+  padding:30px;
+  border-radius:15px;
+  margin-bottom:30px;
+}
+.help-header h2{
+  font-size:28px;
+}
+.help-header p{
+  margin-top:10px;
+  opacity:0.9;
+}
+
+.help-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  margin-bottom:40px;
+}
+
+.help-card{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+.help-card:hover{
+  transform:translateY(-5px);
+}
+.help-card h3{
+  margin-bottom:10px;
+  color:#4db5ff;
+}
+.help-card p{
+  color:#555;
+}
+
+.faq{
+  background:white;
+  border-radius:15px;
+  padding:25px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+.faq h3{
+  margin-bottom:15px;
+}
+.faq-item{
+  border-bottom:1px solid #ddd;
+  padding:15px 0;
+  cursor:pointer;
+}
+.faq-item:last-child{
+  border-bottom:none;
+}
+.faq-question{
+  display:flex;
+  justify-content:space-between;
+  font-weight:bold;
+}
+.faq-answer{
+  display:none;
+  margin-top:10px;
+  color:#555;
+}
+
+.contact{
+  margin-top:40px;
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+.contact input,
+.contact textarea{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+.contact button{
+  margin-top:15px;
+  padding:12px 25px;
+  border:none;
+  border-radius:25px;
+  background:#4db5ff;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+.contact button:hover{
+  background:#6c63ff;
+}
+
+.bottom-back{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+}
+.bottom-back button{
+  background:#1e1e2f;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:12px;
+  font-size:13px;
+  cursor:pointer;
+}
+.bottom-back button:hover{
+  background:#4db5ff;
+}
+
+@media(max-width:768px){
+  .layout{
+    flex-direction:column;
+  }
+  .sidebar{
+    width:100%;
+    display:flex;
+    overflow-x:auto;
+  }
+}
+</style>
+
+<script>
+function toggleFaq(index){
+  let answer=document.getElementById("faq"+index);
+  answer.style.display=answer.style.display==="block"?"none":"block";
+}
+</script>
+
+</head>
+<body>
+
+<div class="top-nav">
+  <div class="logo">SkillVault</div>
+  <div>
+    <a href="landing.html">Home</a>
+    <a href="login.html">Logout</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <div class="main">
+
+    <div class="help-header">
+      <h2>How can we help you?</h2>
+      <p>Find answers, guides, and support for SkillVault</p>
+    </div>
+
+    <div class="help-grid">
+      <div class="help-card">
+        <h3>📘 Getting Started</h3>
+        <p>Learn how to add skills and track progress.</p>
+      </div>
+      <div class="help-card">
+        <h3>📊 Analytics</h3>
+        <p>Understand your learning insights.</p>
+      </div>
+      <div class="help-card">
+        <h3>📄 Resume</h3>
+        <p>Create a professional resume from skills.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <h3>Frequently Asked Questions</h3>
+
+      <div class="faq-item" onclick="toggleFaq(1)">
+        <div class="faq-question">How to add a skill? <span>+</span></div>
+        <div class="faq-answer" id="faq1">Go to Skills page → Add Skill.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(2)">
+        <div class="faq-question">How does roadmap work? <span>+</span></div>
+        <div class="faq-answer" id="faq2">Roadmap shows step-by-step learning paths.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(3)">
+        <div class="faq-question">Can I export resume? <span>+</span></div>
+        <div class="faq-answer" id="faq3">Yes, resume can be downloaded as PDF.</div>
+      </div>
+    </div>
+
+    <div class="contact">
+      <h3>Contact Support</h3>
+      <input type="text" placeholder="Your Name">
+      <input type="email" placeholder="Your Email">
+      <textarea rows="4" placeholder="Describe your issue"></textarea>
+      <button>Submit</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="bottom-back">
+  <button onclick="window.history.back()">← Back</button>
+</div>
+
+</body>
+</html>

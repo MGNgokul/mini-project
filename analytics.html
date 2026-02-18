@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<meta name="theme-color" content="#1e1e2f">
+<title>Skill Development Dashboard | SkillVault</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI, sans-serif;
+}
+
+body{
+  background:#f4f7fb;
+  color:#333;
+}
+
+.navbar{
+  height:70px;
+  background:#1e1e2f;
+  color:#4db5ff;
+  display:flex;
+  align-items:center;
+  padding:0 30px;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.container{
+  padding:40px 8%;
+}
+
+.section{
+  margin-bottom:50px;
+}
+
+.card-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+.card h3{
+  font-size:14px;
+  color:#777;
+}
+
+.card p{
+  font-size:28px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.progress-box{
+  margin-top:15px;
+}
+
+.progress-bar{
+  height:8px;
+  background:#e0e0e0;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:6px;
+}
+
+.progress-bar span{
+  display:block;
+  height:100%;
+  width:0;
+  background:#4db5ff;
+  transition:1.5s;
+}
+
+.analysis-box{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.analysis-item{
+  margin-bottom:15px;
+  font-size:14px;
+}
+
+.recommend-box{
+  background:#1e1e2f;
+  color:white;
+  padding:25px;
+  border-radius:15px;
+}
+
+.recommend-box ul{
+  margin-top:15px;
+  padding-left:20px;
+}
+
+.recommend-box li{
+  margin-bottom:8px;
+}
+
+.score{
+  font-size:32px;
+  font-weight:bold;
+  margin-top:10px;
+  color:#4db5ff;
+}
+
+@media(max-width:768px){
+  .container{
+    padding:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  SkillVault – Student Skill Development
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <h2>Learning Performance Overview</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Skills Completed</h3>
+        <p id="skills">0</p>
+      </div>
+      <div class="card">
+        <h3>Total Learning Hours</h3>
+        <p id="hours">0</p>
+      </div>
+      <div class="card">
+        <h3>Career Readiness Score</h3>
+        <div class="score" id="score">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Skill Strength Analysis</h2>
+
+    <div class="progress-box">
+      HTML
+      <div class="progress-bar"><span id="htmlBar"></span></div>
+    </div>
+
+    <div class="progress-box">
+      CSS
+      <div class="progress-bar"><span id="cssBar"></span></div>
+    </div>
+
+    <div class="progress-box">
+      JavaScript
+      <div class="progress-bar"><span id="jsBar"></span></div>
+    </div>
+
+  </div>
+
+  <div class="section">
+    <h2>Performance Analysis</h2>
+    <div class="analysis-box" id="analysisText"></div>
+  </div>
+
+  <div class="section">
+    <h2>Weekly Skill Improvement Plan</h2>
+    <div class="recommend-box">
+      <strong>Recommended Focus Areas:</strong>
+      <ul id="recommendList"></ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let roadmap = JSON.parse(localStorage.getItem("roadmapProgress")) || {
+  started: [],
+  completed: []
+};
+
+let completed = roadmap.completed.length;
+let totalSteps = 3;
+let hours = completed * 20;
+let score = Math.round((completed/totalSteps)*100);
+
+document.getElementById("skills").innerText = completed;
+document.getElementById("hours").innerText = hours;
+document.getElementById("score").innerText = score + "%";
+
+document.getElementById("htmlBar").style.width =
+  roadmap.completed.includes(1) ? "100%" : "30%";
+
+document.getElementById("cssBar").style.width =
+  roadmap.completed.includes(2) ? "100%" : "20%";
+
+document.getElementById("jsBar").style.width =
+  roadmap.completed.includes(3) ? "100%" : "10%";
+
+let analysis = "";
+
+if(score < 40){
+  analysis = "You are in the beginner stage. Focus on mastering HTML fundamentals and consistent daily practice.";
+}
+else if(score < 80){
+  analysis = "Good progress! Strengthen JavaScript and build mini projects to improve problem-solving skills.";
+}
+else{
+  analysis = "Excellent performance! You are industry ready. Start building real-world projects and prepare for interviews.";
+}
+
+document.getElementById("analysisText").innerText = analysis;
+
+let recommend = document.getElementById("recommendList");
+
+if(!roadmap.completed.includes(1)){
+  recommend.innerHTML += "<li>Complete HTML structure and forms practice</li>";
+}
+if(!roadmap.completed.includes(2)){
+  recommend.innerHTML += "<li>Practice responsive layouts using Flexbox & Grid</li>";
+}
+if(!roadmap.completed.includes(3)){
+  recommend.innerHTML += "<li>Work on DOM projects and API integration</li>";
+}
+if(completed === totalSteps){
+  recommend.innerHTML += "<li>Start portfolio project development</li>";
+  recommend.innerHTML += "<li>Prepare resume & mock interviews</li>";
+}
+</script>
+
+</body>
+</html>
