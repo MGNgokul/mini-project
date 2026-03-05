@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
   <link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 <link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 <link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 <meta name="theme-color" content="#1e1e2f">
 <title>Skill Development Dashboard | SkillVault</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 
 <style>
 *{
@@ -124,6 +128,12 @@ body{
   color:#4db5ff;
 }
 
+.notice{
+  margin-top:8px;
+  color:#b54747;
+  font-size:13px;
+}
+
 @media(max-width:768px){
   .container{
     padding:20px;
@@ -154,6 +164,7 @@ body{
       <div class="card">
         <h3>Career Readiness Score</h3>
         <div class="score" id="score">0%</div>
+        <div id="dataNotice" class="notice"></div>
       </div>
     </div>
   </div>
@@ -194,59 +205,183 @@ body{
 </div>
 
 <script>
-let roadmap = JSON.parse(localStorage.getItem("roadmapProgress")) || {
-  started: [],
-  completed: []
-};
+const ROADMAP_KEY = "roadmapProgressV2";
+const SKILLS_KEY = "skillvaultSkills";
+const TOTAL_ROADMAP_STEPS = 6;
+const VALID_STATUSES = ["Planned", "In Progress", "Completed"];
 
-let completed = roadmap.completed.length;
-let totalSteps = 3;
-let hours = completed * 20;
-let score = Math.round((completed/totalSteps)*100);
+function safeParse(value){
+  try{
+    return JSON.parse(value);
+  }catch{
+    return null;
+  }
+}
 
-document.getElementById("skills").innerText = completed;
-document.getElementById("hours").innerText = hours;
-document.getElementById("score").innerText = score + "%";
+function toInt(value){
+  const num = Number(value);
+  return Number.isFinite(num) ? Math.round(num) : 0;
+}
 
-document.getElementById("htmlBar").style.width =
-  roadmap.completed.includes(1) ? "100%" : "30%";
+function clamp(num, min, max){
+  return Math.max(min, Math.min(max, num));
+}
 
-document.getElementById("cssBar").style.width =
-  roadmap.completed.includes(2) ? "100%" : "20%";
+function sanitizeRoadmap(raw){
+  const valid = [1,2,3,4,5,6];
+  const started = Array.isArray(raw && raw.started) ? raw.started.filter(id => valid.includes(id)) : [];
+  const completed = Array.isArray(raw && raw.completed) ? raw.completed.filter(id => valid.includes(id)) : [];
+  const startedSet = new Set(started);
 
-document.getElementById("jsBar").style.width =
-  roadmap.completed.includes(3) ? "100%" : "10%";
+  completed.forEach(id => startedSet.add(id));
+
+  return {
+    started: [...startedSet],
+    completed: [...new Set(completed)]
+  };
+}
+
+function sanitizeSkills(raw){
+  if(!Array.isArray(raw)){
+    return [];
+  }
+
+  return raw.map(item => {
+    const progress = clamp(toInt(item && item.progress), 0, 100);
+    let status = String(item && item.status ? item.status : "Planned");
+    status = VALID_STATUSES.includes(status) ? status : "Planned";
+
+    if(progress === 100){
+      status = "Completed";
+    }else if(progress > 0 && status === "Planned"){
+      status = "In Progress";
+    }
+
+    return {
+      name: String(item && item.name ? item.name : "Unknown"),
+      category: String(item && item.category ? item.category : ""),
+      status: status,
+      progress: progress,
+      hours: clamp(toInt(item && item.hours), 0, 1000)
+    };
+  });
+}
+
+function average(values){
+  if(values.length === 0){
+    return 0;
+  }
+  const total = values.reduce((sum, n) => sum + n, 0);
+  return Math.round(total / values.length);
+}
+
+function setWidth(id, value){
+  document.getElementById(id).style.width = clamp(value, 0, 100) + "%";
+}
+
+function addRecommendation(text){
+  const li = document.createElement("li");
+  li.textContent = text;
+  document.getElementById("recommendList").appendChild(li);
+}
+
+function collectQualityIssues(roadmap, skills, hadRoadmapRaw, hadSkillsRaw){
+  const issues = [];
+
+  if(!hadRoadmapRaw){
+    issues.push("Roadmap dataset not found.");
+  }
+  if(!hadSkillsRaw){
+    issues.push("Skills dataset not found.");
+  }
+
+  if(roadmap.completed.length > TOTAL_ROADMAP_STEPS){
+    issues.push("Roadmap completed count exceeded total steps and was normalized.");
+  }
+
+  for(let i = 2; i <= TOTAL_ROADMAP_STEPS; i++){
+    if(roadmap.completed.includes(i) && !roadmap.completed.includes(i - 1)){
+      issues.push("Roadmap completion sequence has gaps.");
+      break;
+    }
+  }
+
+  if(skills.length === 0){
+    issues.push("No skills data available yet.");
+  }
+
+  return issues;
+}
+
+const roadmapRaw = safeParse(localStorage.getItem(ROADMAP_KEY));
+const skillsRaw = safeParse(localStorage.getItem(SKILLS_KEY));
+const roadmap = sanitizeRoadmap(roadmapRaw);
+const skills = sanitizeSkills(skillsRaw);
+
+const completedRoadmap = roadmap.completed.length;
+const roadmapScore = Math.round((completedRoadmap / TOTAL_ROADMAP_STEPS) * 100);
+
+const completedSkills = skills.filter(s => s.status === "Completed").length;
+const learningHours = skills.reduce((sum, s) => sum + s.hours, 0);
+const avgSkillProgress = average(skills.map(s => s.progress));
+
+const readinessScore = skills.length
+  ? Math.round((roadmapScore * 0.55) + (avgSkillProgress * 0.45))
+  : roadmapScore;
+
+document.getElementById("skills").textContent = completedSkills;
+document.getElementById("hours").textContent = learningHours;
+document.getElementById("score").textContent = readinessScore + "%";
+
+const issues = collectQualityIssues(roadmap, skills, !!roadmapRaw, !!skillsRaw);
+if(issues.length){
+  document.getElementById("dataNotice").textContent = "Validation: " + issues.join(" ");
+}
+
+const htmlSkills = skills.filter(s => s.name.toLowerCase().includes("html"));
+const cssSkills = skills.filter(s => s.name.toLowerCase().includes("css"));
+const jsSkills = skills.filter(s => s.name.toLowerCase().includes("javascript") || s.name.toLowerCase().includes("js"));
+
+setWidth("htmlBar", htmlSkills.length ? average(htmlSkills.map(s => s.progress)) : (roadmap.completed.includes(1) ? 100 : 20));
+setWidth("cssBar", cssSkills.length ? average(cssSkills.map(s => s.progress)) : (roadmap.completed.includes(2) ? 100 : 18));
+setWidth("jsBar", jsSkills.length ? average(jsSkills.map(s => s.progress)) : (roadmap.completed.includes(3) ? 100 : 12));
 
 let analysis = "";
-
-if(score < 40){
-  analysis = "You are in the beginner stage. Focus on mastering HTML fundamentals and consistent daily practice.";
+if(readinessScore < 40){
+  analysis = "Current stage: Beginner. Prioritize fundamentals and maintain daily consistency before adding advanced topics.";
+}else if(readinessScore < 75){
+  analysis = "Current stage: Growing. You are making steady progress; convert knowledge into mini projects and weekly revision.";
+}else{
+  analysis = "Current stage: Strong. Focus on real projects, portfolio quality, and interview-level problem solving.";
 }
-else if(score < 80){
-  analysis = "Good progress! Strengthen JavaScript and build mini projects to improve problem-solving skills.";
-}
-else{
-  analysis = "Excellent performance! You are industry ready. Start building real-world projects and prepare for interviews.";
-}
-
-document.getElementById("analysisText").innerText = analysis;
-
-let recommend = document.getElementById("recommendList");
+document.getElementById("analysisText").textContent = analysis;
 
 if(!roadmap.completed.includes(1)){
-  recommend.innerHTML += "<li>Complete HTML structure and forms practice</li>";
+  addRecommendation("Complete HTML structure and forms practice.");
 }
 if(!roadmap.completed.includes(2)){
-  recommend.innerHTML += "<li>Practice responsive layouts using Flexbox & Grid</li>";
+  addRecommendation("Improve CSS layout skills using Flexbox/Grid and responsive tasks.");
 }
 if(!roadmap.completed.includes(3)){
-  recommend.innerHTML += "<li>Work on DOM projects and API integration</li>";
+  addRecommendation("Strengthen JavaScript with DOM tasks and async API exercises.");
 }
-if(completed === totalSteps){
-  recommend.innerHTML += "<li>Start portfolio project development</li>";
-  recommend.innerHTML += "<li>Prepare resume & mock interviews</li>";
+if(!roadmap.completed.includes(4)){
+  addRecommendation("Build two React component-based mini projects.");
+}
+if(!roadmap.completed.includes(5)){
+  addRecommendation("Practice backend API development with validation and auth basics.");
+}
+if(!roadmap.completed.includes(6)){
+  addRecommendation("Create one end-to-end capstone project and prepare mock interviews.");
+}
+if(roadmap.completed.length === TOTAL_ROADMAP_STEPS){
+  addRecommendation("Roadmap completed. Move into portfolio polishing and targeted job applications.");
+}
+if(document.getElementById("recommendList").children.length === 0){
+  addRecommendation("Keep momentum by maintaining weekly project and revision targets.");
 }
 </script>
 
 </body>
 </html>
+

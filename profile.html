@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 
 <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 
@@ -240,10 +243,14 @@ function addSkill(){
 }
 
 function renderSkills(){
-  skillTags.innerHTML="";
+  skillTags.textContent="";
   skills.forEach((skill,index)=>{
-    skillTags.innerHTML += 
-    `<span onclick="removeSkill(${index})">${skill} ❌</span>`;
+    const tag=document.createElement("span");
+    tag.textContent = skill + " X";
+    tag.addEventListener("click", function(){
+      removeSkill(index);
+    });
+    skillTags.appendChild(tag);
   });
 }
 
@@ -312,3 +319,4 @@ function previewImage(event){
 
 </body>
 </html>
+

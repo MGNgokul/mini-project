@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 <title>Settings | SkillVault</title>
 
 <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
@@ -118,12 +121,11 @@ button.primary:hover{
 
 <div class="navbar">
   SkillVault - Settings
-  <button class="back-btn" onclick="goDashboard()">← Dashboard</button>
+  <button class="back-btn" onclick="goDashboard()">&larr; Dashboard</button>
 </div>
 
 <div class="container">
 
-  <!-- Preferences -->
   <div class="card">
     <h3>Preferences</h3>
 
@@ -138,7 +140,6 @@ button.primary:hover{
     </div>
   </div>
 
-  <!-- Change Password -->
   <div class="card">
     <h3>Change Password</h3>
 
@@ -154,8 +155,6 @@ button.primary:hover{
 </div>
 
 <script>
-
-/* Load Saved Settings */
 window.onload = function(){
   const settings = JSON.parse(localStorage.getItem("settings"));
   if(settings){
@@ -167,7 +166,6 @@ window.onload = function(){
   }
 };
 
-/* Save Preferences */
 darkMode.addEventListener("change", saveSettings);
 emailNotify.addEventListener("change", saveSettings);
 
@@ -178,53 +176,102 @@ function saveSettings(){
   };
 
   localStorage.setItem("settings", JSON.stringify(settings));
-
   document.body.classList.toggle("dark", darkMode.checked);
 }
 
-/* Change Password Validation */
 function updatePassword(){
-
   const current = currentPass.value.trim();
   const newP = newPass.value.trim();
   const confirm = confirmPass.value.trim();
   const strong = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
 
-  msg.innerHTML = "";
+  msg.textContent = "";
+  msg.className = "";
 
   if(current === "" || newP === "" || confirm === ""){
-    msg.innerHTML = "<div class='error'>All fields are required</div>";
+    msg.textContent = "All fields are required";
+    msg.className = "error";
     return;
   }
 
-  let user = JSON.parse(localStorage.getItem("skillvaultUser"));
+  const sessionUser = JSON.parse(localStorage.getItem("skillvaultUser"));
+  if(!sessionUser || !sessionUser.email){
+    msg.textContent = "Please login again";
+    msg.className = "error";
+    return;
+  }
 
-  if(!user || current !== user.password){
-    msg.innerHTML = "<div class='error'>Current password incorrect</div>";
+  const users = JSON.parse(localStorage.getItem("skillvaultUsers")) || [];
+  const user = users.find(item => item.email === sessionUser.email);
+
+  if(!user){
+    msg.textContent = "User not found";
+    msg.className = "error";
+    return;
+  }
+
+  verifyAndUpdatePassword(user, users, current, newP, confirm, strong);
+}
+
+function arrayBufferToHex(buffer){
+  return Array.from(new Uint8Array(buffer))
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function generateSalt(length){
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  return btoa(String.fromCharCode(...bytes));
+}
+
+async function hashPassword(password, salt){
+  const encoded = new TextEncoder().encode(password + salt);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
+  return arrayBufferToHex(hashBuffer);
+}
+
+async function verifyAndUpdatePassword(user, users, current, newP, confirm, strong){
+  let isCurrentPasswordValid = false;
+
+  if(user.passwordHash && user.passwordSalt){
+    const currentHash = await hashPassword(current, user.passwordSalt);
+    isCurrentPasswordValid = currentHash === user.passwordHash;
+  }else if(user.password){
+    isCurrentPasswordValid = current === user.password;
+  }
+
+  if(!isCurrentPasswordValid){
+    msg.textContent = "Current password incorrect";
+    msg.className = "error";
     return;
   }
 
   if(!strong.test(newP)){
-    msg.innerHTML = "<div class='error'>Min 6 chars, 1 uppercase, 1 number</div>";
+    msg.textContent = "Min 6 chars, 1 uppercase, 1 number";
+    msg.className = "error";
     return;
   }
 
   if(newP !== confirm){
-    msg.innerHTML = "<div class='error'>Passwords do not match</div>";
+    msg.textContent = "Passwords do not match";
+    msg.className = "error";
     return;
   }
 
-  user.password = newP;
-  localStorage.setItem("skillvaultUser", JSON.stringify(user));
+  user.passwordSalt = generateSalt(16);
+  user.passwordHash = await hashPassword(newP, user.passwordSalt);
+  delete user.password;
+  localStorage.setItem("skillvaultUsers", JSON.stringify(users));
 
-  msg.innerHTML = "<div class='success'>Password Updated Successfully ✅</div>";
+  msg.textContent = "Password Updated Successfully";
+  msg.className = "success";
 
   currentPass.value="";
   newPass.value="";
   confirmPass.value="";
 }
 
-/* Back Button */
 function goDashboard(){
   window.location.href = "dashboard.html";
 }
@@ -233,3 +280,4 @@ function goDashboard(){
 
 </body>
 </html>
+

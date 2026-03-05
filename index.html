@@ -173,6 +173,59 @@ body{
   animation-delay:2s;
 }
 
+.overview{
+  max-width:1100px;
+  margin:40px auto 80px;
+  padding:0 20px;
+  color:white;
+}
+
+.overview h2{
+  text-align:center;
+  font-size:34px;
+  margin-bottom:12px;
+}
+
+.overview-sub{
+  text-align:center;
+  opacity:0.9;
+  margin-bottom:28px;
+}
+
+.overview-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:18px;
+}
+
+.overview-item{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:16px;
+  padding:20px;
+  backdrop-filter:blur(12px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.25);
+  transform:translateY(-35px);
+  opacity:0;
+  transition:transform 0.7s ease, opacity 0.7s ease;
+}
+
+.overview-item.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.overview-item h3{
+  margin-bottom:8px;
+  color:#9ad7ff;
+}
+
+.overview-item p{
+  font-size:14px;
+  line-height:1.5;
+  opacity:0.95;
+}
+
 @keyframes float{
   0%{transform:translateY(0px);}
   50%{transform:translateY(-25px);}
@@ -218,6 +271,45 @@ body{
     </a>
   </div>
 </div>
+
+<section class="overview" id="overview">
+  <h2>Project Overview</h2>
+  <p class="overview-sub">Scroll down to explore what SkillVault offers for learning, tracking, and career growth.</p>
+  <div class="overview-grid">
+    <div class="overview-item">
+      <h3>Auth & Access</h3>
+      <p>Secure sign in flow with session checks to protect private pages like Dashboard, Profile, and Settings.</p>
+    </div>
+    <div class="overview-item">
+      <h3>Skill Tracking</h3>
+      <p>Add, manage, and monitor your skills with progress visibility across dedicated pages.</p>
+    </div>
+    <div class="overview-item">
+      <h3>Learning Roadmap</h3>
+      <p>Structured roadmap steps help users move from basics to advanced project readiness.</p>
+    </div>
+    <div class="overview-item">
+      <h3>Career Support</h3>
+      <p>Resume, certificates, and profile sections support portfolio building and interview preparation.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+const overviewItems = document.querySelectorAll(".overview-item");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, index) => {
+    if(entry.isIntersecting){
+      setTimeout(() => {
+        entry.target.classList.add("show");
+      }, index * 120);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+overviewItems.forEach((item) => observer.observe(item));
+</script>
 
 </body>
 </html>

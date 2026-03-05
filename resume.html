@@ -7,6 +7,8 @@
 <meta name="theme-color" content="#1e1e2f">
 <title>Resume Preview | SkillVault</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 
 <style>
 body{
@@ -43,6 +45,12 @@ body{
 .resume-sidebar a:hover{
   color:#4db5ff;
 }
+.sidebar-msg{
+  margin-top:14px;
+  font-size:12px;
+  color:#9dd7ff;
+  min-height:16px;
+}
 
 .resume-main{
   background:white;
@@ -66,6 +74,11 @@ body{
   padding:8px 14px;
   border-radius:8px;
   cursor:pointer;
+}
+.resume-msg{
+  margin-top:8px;
+  font-size:13px;
+  color:#1f7a3f;
 }
 
 .section{
@@ -105,6 +118,7 @@ body{
 }
 .back-btn button:hover{
   background:#4db5ff;
+}
 
 @media(max-width:768px){
   .resume-grid{
@@ -117,8 +131,36 @@ body{
 </style>
 
 <script>
+function setMsg(targetId, text){
+  const el = document.getElementById(targetId);
+  if(el){
+    el.textContent = text;
+  }
+}
+
 function downloadResume(){
-  alert("PDF Download feature can be integrated here!");
+  setMsg("downloadMsg", "PDF download is not connected yet. Integrate jsPDF or backend export.");
+}
+
+function sidebarDownload(e){
+  e.preventDefault();
+  downloadResume();
+  setMsg("sidebarMsg", "Use Download PDF button in resume header.");
+}
+
+async function sidebarShare(e){
+  e.preventDefault();
+  const shareUrl = window.location.href;
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(shareUrl);
+      setMsg("sidebarMsg", "Resume link copied successfully.");
+      return;
+    }
+    setMsg("sidebarMsg", "Secure context required for copy. Copy this URL: " + shareUrl);
+  }catch{
+    setMsg("sidebarMsg", "Unable to copy link now. Copy this URL: " + shareUrl);
+  }
 }
 </script>
 
@@ -130,11 +172,12 @@ function downloadResume(){
   <div class="resume-sidebar">
     <h2>SkillVault</h2>
     <p>Resume Tools</p>
-    <a href="#">Edit Resume</a>
-    <a href="#">Add Skill</a>
-    <a href="#">Attach Certificate</a>
-    <a href="#">Download PDF</a>
-    <a href="#">Share Link</a>
+    <a href="profile.html">Edit Resume</a>
+    <a href="skills.html">Add Skill</a>
+    <a href="certificates.html">Attach Certificate</a>
+    <a href="#" onclick="sidebarDownload(event)">Download PDF</a>
+    <a href="#" onclick="sidebarShare(event)">Share Link</a>
+    <div id="sidebarMsg" class="sidebar-msg"></div>
   </div>
 
   <div class="resume-main">
@@ -143,6 +186,7 @@ function downloadResume(){
       <div>
         <h1>Gokulnath</h1>
         <p>Frontend Developer</p>
+        <div id="downloadMsg" class="resume-msg"></div>
       </div>
       <button onclick="downloadResume()">Download PDF</button>
     </div>

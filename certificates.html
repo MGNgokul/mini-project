@@ -1,89 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+<link rel="icon" type="image/png" sizes="32x32" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 <link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 <link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 <meta name="theme-color" content="#1e1e2f">
 <title>Certificates | SkillVault</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:Segoe UI, sans-serif;
+  font-family:'Segoe UI',sans-serif;
 }
+
 body{
   background:#f4f6f9;
+  color:#23323c;
 }
 
 .navbar{
-  height:60px;
+  min-height:60px;
   background:#1e1e2f;
   color:#4db5ff;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 25px;
+  padding:12px 22px;
   font-size:22px;
-  font-weight:bold;
+  font-weight:700;
+  gap:12px;
+  flex-wrap:wrap;
 }
+
 .navbar a{
   color:white;
   text-decoration:none;
   font-size:14px;
-  margin-left:15px;
+  margin-left:12px;
 }
 
 .main{
-  padding:30px;
+  padding:28px;
+  max-width:1100px;
+  margin:0 auto;
 }
 
 .filter{
   display:flex;
-  gap:12px;
-  margin-bottom:25px;
+  gap:10px;
+  margin-bottom:14px;
   flex-wrap:wrap;
 }
+
 .filter button{
-  padding:8px 16px;
+  padding:8px 14px;
   border:none;
   border-radius:20px;
   background:#e0e0e0;
   cursor:pointer;
   font-size:13px;
-  transition:0.3s;
+  transition:transform .2s ease, background-color .2s ease, color .2s ease;
 }
+
 .filter button.active,
 .filter button:hover{
   background:#4db5ff;
   color:white;
+  transform:translateY(-1px);
+}
+
+.status-msg{
+  min-height:18px;
+  margin-bottom:14px;
+  font-size:13px;
+  color:#d64545;
+}
+
+.status-msg.success{
+  color:#1b7a2a;
 }
 
 .certificate{
   background:white;
-  padding:25px;
-  border-radius:18px;
-  box-shadow:0 10px 20px rgba(0,0,0,0.12);
+  padding:22px;
+  border-radius:16px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.1);
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:20px;
-  transition:0.3s;
+  margin-bottom:16px;
+  opacity:0;
+  transform:translateY(10px);
+  transition:transform .28s ease, box-shadow .28s ease, opacity .28s ease;
 }
+
+.certificate.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
 .certificate:hover{
-  transform:translateY(-5px);
+  transform:translateY(-4px);
 }
+
+.certificate.hidden{
+  opacity:0;
+  transform:translateY(8px) scale(0.98);
+  pointer-events:none;
+}
+
 .cert-info h3{
   font-size:18px;
 }
+
 .cert-info p{
   font-size:13px;
   color:#777;
   margin-top:5px;
 }
+
 .badge{
   padding:4px 10px;
   font-size:11px;
@@ -91,38 +133,53 @@ body{
   display:inline-block;
   margin-top:8px;
 }
+
 .completed{
   background:#d4f7dc;
   color:#1b7a2a;
 }
+
 .pending{
   background:#fff3cd;
   color:#856404;
 }
 
 .actions button{
-  padding:8px 14px;
+  padding:8px 13px;
   border:none;
   border-radius:10px;
   font-size:12px;
   cursor:pointer;
   margin-left:8px;
+  transition:transform .2s ease, opacity .2s ease;
 }
+
+.actions button:hover{
+  transform:translateY(-1px);
+}
+
 .view{
   background:#4db5ff;
   color:white;
 }
+
 .download{
   background:#1e1e2f;
   color:white;
 }
 
+.download.disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
 .back-btn{
   position:fixed;
-  bottom:20px;
+  bottom:18px;
   left:50%;
   transform:translateX(-50%);
 }
+
 .back-btn button{
   padding:8px 14px;
   font-size:13px;
@@ -130,8 +187,9 @@ body{
   border-radius:12px;
   background:#1e1e2f;
   color:white;
-  cursor: pointer;
+  cursor:pointer;
 }
+
 .back-btn button:hover{
   background:#4db5ff;
 }
@@ -140,8 +198,9 @@ body{
   .certificate{
     flex-direction:column;
     align-items:flex-start;
-    gap:15px;
+    gap:12px;
   }
+
   .actions{
     width:100%;
     display:flex;
@@ -149,22 +208,6 @@ body{
   }
 }
 </style>
-
-<script>
-function filterCert(type){
-  document.querySelectorAll(".filter button").forEach(btn=>btn.classList.remove("active"));
-  event.target.classList.add("active");
-
-  document.querySelectorAll(".certificate").forEach(cert=>{
-    if(type==="all" || cert.classList.contains(type)){
-      cert.style.display="flex";
-    }else{
-      cert.style.display="none";
-    }
-  });
-}
-</script>
-
 </head>
 <body>
 
@@ -177,12 +220,13 @@ function filterCert(type){
 </div>
 
 <div class="main">
-
   <div class="filter">
-    <button class="active" onclick="filterCert('all')">All</button>
-    <button onclick="filterCert('completed')">Completed</button>
-    <button onclick="filterCert('pending')">Pending</button>
+    <button class="active" data-filter="all">All</button>
+    <button data-filter="completed">Completed</button>
+    <button data-filter="pending">Pending</button>
   </div>
+
+  <div id="statusMsg" class="status-msg"></div>
 
   <div class="certificate completed">
     <div class="cert-info">
@@ -191,8 +235,8 @@ function filterCert(type){
       <span class="badge completed">Completed</span>
     </div>
     <div class="actions">
-      <button class="view">View</button>
-      <button class="download">Download</button>
+      <button class="view" data-action="view">View</button>
+      <button class="download" data-action="download">Download</button>
     </div>
   </div>
 
@@ -203,8 +247,8 @@ function filterCert(type){
       <span class="badge completed">Completed</span>
     </div>
     <div class="actions">
-      <button class="view">View</button>
-      <button class="download">Download</button>
+      <button class="view" data-action="view">View</button>
+      <button class="download" data-action="download">Download</button>
     </div>
   </div>
 
@@ -215,16 +259,122 @@ function filterCert(type){
       <span class="badge pending">Pending</span>
     </div>
     <div class="actions">
-      <button class="view">View</button>
-      <button class="download">Download</button>
+      <button class="view" data-action="view">View</button>
+      <button class="download" data-action="download">Download</button>
     </div>
   </div>
-
 </div>
 
 <div class="back-btn">
-  <button onclick="history.back()">← Back</button>
+  <button onclick="history.back()"><- Back</button>
 </div>
+
+<script>
+const allowedFilters = ["all", "completed", "pending"];
+const statusMsg = document.getElementById("statusMsg");
+const cards = Array.from(document.querySelectorAll(".certificate"));
+const filterButtons = Array.from(document.querySelectorAll(".filter button"));
+
+function setStatus(message, isSuccess){
+  statusMsg.textContent = message || "";
+  statusMsg.className = "status-msg" + (isSuccess ? " success" : "");
+}
+
+function validateCertificates(){
+  cards.forEach((card, index) => {
+    const isCompleted = card.classList.contains("completed");
+    const isPending = card.classList.contains("pending");
+
+    if(!isCompleted && !isPending){
+      card.classList.add("pending");
+    }
+
+    const certInfo = card.querySelector(".cert-info");
+    const badge = certInfo.querySelector(".badge");
+    if(!badge){
+      const span = document.createElement("span");
+      span.className = "badge pending";
+      span.textContent = "Pending";
+      certInfo.appendChild(span);
+    }
+
+    const downloadBtn = card.querySelector('[data-action="download"]');
+    if(card.classList.contains("pending") && downloadBtn){
+      downloadBtn.classList.add("disabled");
+      downloadBtn.setAttribute("aria-disabled", "true");
+    }
+
+    setTimeout(() => card.classList.add("show"), 110 * index);
+  });
+}
+
+function filterCert(type){
+  if(!allowedFilters.includes(type)){
+    setStatus("Invalid filter request ignored.", false);
+    return;
+  }
+
+  setStatus("", false);
+
+  filterButtons.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.filter === type);
+  });
+
+  cards.forEach((card, index) => {
+    const visible = type === "all" || card.classList.contains(type);
+    if(visible){
+      card.style.display = "flex";
+      requestAnimationFrame(() => {
+        setTimeout(() => card.classList.remove("hidden"), index * 60);
+      });
+      return;
+    }
+
+    card.classList.add("hidden");
+    setTimeout(() => {
+      if(card.classList.contains("hidden")){
+        card.style.display = "none";
+      }
+    }, 240);
+  });
+}
+
+filterButtons.forEach(btn => {
+  btn.addEventListener("click", function(){
+    filterCert(btn.dataset.filter);
+  });
+});
+
+cards.forEach(card => {
+  card.querySelectorAll(".actions button").forEach(btn => {
+    btn.addEventListener("click", function(){
+      const action = btn.dataset.action;
+      const title = card.querySelector("h3").textContent;
+      const isPending = card.classList.contains("pending");
+
+      if(isPending && action === "download"){
+        setStatus("Cannot download pending certificate: " + title, false);
+        return;
+      }
+
+      if(isPending && action === "view"){
+        setStatus("Certificate is not available yet: " + title, false);
+        return;
+      }
+
+      if(action === "view"){
+        setStatus("Opened certificate preview: " + title, true);
+      }else if(action === "download"){
+        setStatus("Download started: " + title, true);
+      }else{
+        setStatus("Invalid action blocked.", false);
+      }
+    });
+  });
+});
+
+validateCertificates();
+</script>
 
 </body>
 </html>

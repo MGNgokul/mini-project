@@ -22,9 +22,13 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:linear-gradient(-45deg,#1e1e2f,#4db5ff,#203a43,#0f2027);
-  background-size:400% 400%;
-  animation:bg 12s ease infinite;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(140deg,#0f2027,#203a43,#2c5364,#1f6c90);
+  background-size:220% 220%;
+  animation:bg 16s ease infinite;
+  color:white;
+  padding:20px;
 }
 
 @keyframes bg{
@@ -33,124 +37,212 @@ body{
   100%{background-position:0% 50%;}
 }
 
-.login-box{
-  width:380px;
-  max-width:95%;
-  padding:40px 30px;
-  border-radius:25px;
-  background:rgba(255,255,255,0.15);
-  backdrop-filter:blur(18px);
-  box-shadow:0 25px 50px rgba(0,0,0,0.4);
-  color:white;
-  animation:fadeIn 1s ease;
+.login-layout{
+  width:100%;
+  max-width:360px;
+  animation:fadeIn 0.6s ease;
+  position:relative;
+  z-index:2;
 }
 
 @keyframes fadeIn{
-  from{opacity:0; transform:translateY(30px);}
+  from{opacity:0; transform:translateY(10px);}
   to{opacity:1; transform:translateY(0);}
 }
 
 .logo{
-  font-size:28px;
+  font-size:36px;
   font-weight:bold;
   text-align:center;
-  margin-bottom:8px;
+  margin-bottom:6px;
+  letter-spacing:0.4px;
 }
 
 .logo span{
-  color:#4db5ff;
+  color:#8edbff;
 }
 
-.login-box p{
+.subtitle{
   text-align:center;
   font-size:14px;
-  margin-bottom:25px;
+  margin-bottom:22px;
   opacity:0.9;
 }
 
 .input-group{
-  margin-bottom:18px;
+  margin-bottom:14px;
 }
 
 .input-group label{
-  font-size:13px;
+  font-size:12px;
+  display:block;
+  margin-bottom:6px;
+  opacity:0.9;
 }
 
 .input-group input{
   width:100%;
-  padding:12px;
-  margin-top:6px;
-  border:none;
-  border-radius:12px;
+  padding:12px 13px;
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:10px;
+  background:rgba(255,255,255,0.12);
+  color:white;
   outline:none;
   font-size:14px;
+  transition:border-color .2s ease, background-color .2s ease;
+}
+
+.input-group input::placeholder{
+  color:rgba(255,255,255,0.72);
 }
 
 .input-group input:focus{
-  box-shadow:0 0 0 2px #4db5ff;
-}
-
-.password-box{
-  position:relative;
-}
-
-.password-box span{
-  position:absolute;
-  right:12px;
-  top:38px;
-  cursor:pointer;
-  font-size:13px;
-  color:#4db5ff;
+  border-color:#8edbff;
+  background:rgba(255,255,255,0.16);
 }
 
 .error{
   font-size:12px;
-  color:#ff6b6b;
+  color:#ffd1d1;
   margin-top:5px;
+  min-height:14px;
 }
 
 .login-btn{
   width:100%;
   padding:12px;
   border:none;
-  border-radius:12px;
-  background:#4db5ff;
-  color:white;
-  font-size:16px;
+  border-radius:10px;
+  background:#8edbff;
+  color:#0f2531;
+  font-size:15px;
+  font-weight:600;
   cursor:pointer;
-  margin-top:10px;
-  transition:0.3s;
+  margin-top:8px;
+  transition:transform .2s ease, background-color .2s ease;
 }
 
 .login-btn:hover{
-  background:white;
-  color:#1e1e2f;
+  background:#c2edff;
+  transform:translateY(-1px);
 }
 
 .links{
-  margin-top:18px;
+  margin-top:14px;
   text-align:center;
   font-size:13px;
+  opacity:0.95;
 }
 
 .links a{
-  color:#4db5ff;
+  color:#b9ebff;
   text-decoration:none;
 }
 
 @media(max-width:480px){
-  .login-box{
-    padding:30px 20px;
+  .login-layout{
+    max-width:100%;
   }
+  .logo{font-size:32px;}
+}
+
+.bg-logos{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  overflow:hidden;
+}
+
+.bg-aurora{
+  position:absolute;
+  inset:-20%;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(141,219,255,0.26), transparent 38%),
+    radial-gradient(circle at 78% 30%, rgba(85,255,193,0.2), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(70,120,255,0.22), transparent 42%);
+  animation:auroraMove 15s ease-in-out infinite alternate;
+}
+
+.pulse-ring{
+  position:absolute;
+  width:420px;
+  height:420px;
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:50%;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:0;
+  animation:ringPulse 8s ease-in-out infinite;
+}
+
+.bg-logo{
+  position:absolute;
+  width:60px;
+  height:60px;
+  opacity:0.18;
+  filter:grayscale(0.1);
+  animation:floatLogo 12s ease-in-out infinite;
+}
+
+.l1{top:8%; left:8%;}
+.l2{top:16%; left:28%; animation-delay:1.2s;}
+.l3{top:10%; right:14%; animation-delay:2.1s;}
+.l4{top:34%; left:6%; animation-delay:0.8s;}
+.l5{top:42%; left:30%; animation-delay:1.8s;}
+.l6{top:36%; right:18%; animation-delay:2.8s;}
+.l7{bottom:26%; left:10%; animation-delay:1.1s;}
+.l8{bottom:18%; left:34%; animation-delay:2.3s;}
+.l9{bottom:12%; right:10%; animation-delay:0.6s;}
+.l10{bottom:34%; right:28%; animation-delay:1.6s;}
+.l11{top:56%; left:52%; animation-delay:2.6s;}
+.l12{top:22%; right:40%; animation-delay:0.4s;}
+
+@keyframes floatLogo{
+  0%{transform:translateY(0px) scale(1);}
+  50%{transform:translateY(-10px) scale(1.04);}
+  100%{transform:translateY(0px) scale(1);}
+}
+
+@keyframes auroraMove{
+  0%{transform:translate(-1%,0) scale(1);}
+  50%{transform:translate(1.5%,-1.5%) scale(1.04);}
+  100%{transform:translate(-0.5%,1%) scale(1);}
+}
+
+@keyframes ringPulse{
+  0%{opacity:0.35; transform:translate(-50%,-50%) scale(0.9);}
+  50%{opacity:0.2; transform:translate(-50%,-50%) scale(1.04);}
+  100%{opacity:0.35; transform:translate(-50%,-50%) scale(0.9);}
 }
 </style>
 </head>
 
 <body>
+<div class="bg-aurora"></div>
+<div class="pulse-ring"></div>
+<div class="bg-logos">
+  <img class="bg-logo l1" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="">
+  <img class="bg-logo l2" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="">
+  <img class="bg-logo l3" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="">
+  <img class="bg-logo l4" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="">
+  <img class="bg-logo l5" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="">
+  <img class="bg-logo l6" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">
+  <img class="bg-logo l7" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="">
+  <img class="bg-logo l8" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="">
+  <img class="bg-logo l9" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="">
+  <img class="bg-logo l10" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="">
+  <img class="bg-logo l11" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="">
+  <img class="bg-logo l12" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg" alt="">
+</div>
 
-<div class="login-box">
+<div class="login-layout">
   <div class="logo">Skill<span>Vault</span></div>
-  <p>Login to track your skills and progress</p>
+  <p class="subtitle">Login to track your skills and progress</p>
 
   <form onsubmit="return validateForm()">
     <div class="input-group">
@@ -159,7 +251,7 @@ body{
       <div class="error" id="emailError"></div>
     </div>
 
-    <div class="input-group password-box">
+    <div class="input-group">
       <label>Password</label>
       <input type="password" id="password" placeholder="Enter password">
       <div class="error" id="passwordError"></div>
@@ -169,7 +261,7 @@ body{
   </form>
 
   <div class="links">
-    <a href="#">Forgot Password?</a> |
+    <a href="forgot-password.html">Forgot Password?</a> |
     <a href="register.html">Create Account</a>
   </div>
 </div>
@@ -240,34 +332,75 @@ function validateForm(){
     return false;
   }
 
-  let users = JSON.parse(localStorage.getItem("skillvaultUsers")) || [];
+  validateCredentials(email, password);
+  return false;
+}
 
-  let validUser = users.find(user =>
-    user.email === email && user.password === password
-  );
+function arrayBufferToHex(buffer){
+  return Array.from(new Uint8Array(buffer))
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
 
-  if(validUser){
+async function hashPassword(password, salt){
+  const encoded = new TextEncoder().encode(password + salt);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
+  return arrayBufferToHex(hashBuffer);
+}
 
-      const userData = {
-        email: validUser.email,
-        name: validUser.name,
-        role: "student",
-        loginTime: new Date().toLocaleString(),
-        isLoggedIn: true
-      };
+async function validateCredentials(email, password){
+  const users = JSON.parse(localStorage.getItem("skillvaultUsers")) || [];
+  let validUser = null;
 
-      localStorage.setItem("skillvaultUser",
-        JSON.stringify(userData));
+  for(const user of users){
+    if(user.email !== email){
+      continue;
+    }
 
-      alert("Login Successful!");
-      window.location.href="dashboard.html";
+    if(user.passwordHash && user.passwordSalt){
+      const currentHash = await hashPassword(password, user.passwordSalt);
+      if(currentHash === user.passwordHash){
+        validUser = user;
+      }
+      break;
+    }
 
-  }else{
-      passwordError.textContent="Invalid email or password";
-      shakeBox();
+    if(user.password && user.password === password){
+      validUser = user;
+      break;
+    }
   }
 
-  return false;
+  if(validUser){
+    const userData = {
+      email: validUser.email,
+      name: validUser.name,
+      role: "student",
+      loginAt: Date.now(),
+      loginTime: new Date().toLocaleString(),
+      isLoggedIn: true
+    };
+
+    localStorage.setItem("skillvaultUser", JSON.stringify(userData));
+    window.location.href = "dashboard.html";
+    return;
+  }
+
+  passwordError.textContent = "Invalid email or password";
+  shakeBox();
+}
+
+function shakeBox(){
+  const box = document.querySelector(".login-layout");
+  box.animate(
+    [
+      { transform: "translateX(0)" },
+      { transform: "translateX(-4px)" },
+      { transform: "translateX(4px)" },
+      { transform: "translateX(0)" }
+    ],
+    { duration: 220, easing: "ease" }
+  );
 }
 
 </script>

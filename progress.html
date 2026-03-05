@@ -3,260 +3,456 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 <title>Progress | SkillVault</title>
-
 <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:'Segoe UI', sans-serif;
+  font-family:'Segoe UI',sans-serif;
 }
 
 body{
-  background:#f4f6f9;
+  min-height:100vh;
+  background:linear-gradient(145deg,#0f2027,#203a43,#2c5364);
+  color:#ecf4f8;
+  padding:22px 14px 40px;
 }
 
-.navbar{
-  height:60px;
-  background:#1e1e2f;
-  color:#4db5ff;
+.page{
+  max-width:1150px;
+  margin:0 auto;
+}
+
+.header{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  padding:0 25px;
-  font-size:20px;
-  font-weight:bold;
+  align-items:flex-start;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
 }
 
-.navbar button{
-  background:#4db5ff;
+.header h1{
+  font-size:34px;
+  margin-bottom:6px;
+}
+
+.header p{
+  opacity:0.9;
+}
+
+.btn{
   border:none;
-  padding:8px 14px;
-  border-radius:8px;
-  color:white;
+  border-radius:10px;
+  padding:9px 13px;
   cursor:pointer;
+  font-weight:600;
 }
 
-.main{
-  padding:30px;
-  max-width:1000px;
-  margin:auto;
+.btn-light{
+  background:rgba(255,255,255,0.14);
+  border:1px solid rgba(255,255,255,0.25);
+  color:#ecf4f8;
+}
+
+.notice{
+  margin-bottom:12px;
+  min-height:18px;
+  font-size:13px;
+  color:#ffb3b3;
 }
 
 .summary{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:20px;
-  margin-bottom:30px;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:12px;
+  margin-bottom:14px;
 }
 
-.summary-box{
-  background:white;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+.summary-card{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.22);
+  border-radius:14px;
+  padding:14px;
 }
 
-.summary-box h3{
-  font-size:14px;
-  color:#777;
+.summary-card p{
+  font-size:13px;
+  opacity:0.88;
 }
 
-.summary-box p{
+.summary-card h2{
+  margin-top:8px;
   font-size:28px;
-  font-weight:bold;
-  margin-top:10px;
 }
 
-.skill-section{
-  background:white;
-  padding:25px;
+.toolbar{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.toolbar input,.toolbar select{
+  width:100%;
+  border:none;
   border-radius:10px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  padding:10px 11px;
+}
+
+.skills{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:12px;
 }
 
 .skill{
-  margin-bottom:20px;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.22);
+  border-radius:15px;
+  padding:14px;
 }
 
-.skill-header{
+.skill-head{
   display:flex;
   justify-content:space-between;
-  margin-bottom:6px;
-  font-weight:600;
+  align-items:flex-start;
+  gap:8px;
 }
 
-.progress-bar{
-  background:#ddd;
-  height:12px;
-  border-radius:10px;
+.skill-head h3{
+  font-size:20px;
+}
+
+.chip{
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:12px;
+}
+
+.meta{
+  margin:9px 0;
+  font-size:12px;
+  opacity:0.92;
+}
+
+.track{
+  height:10px;
+  background:rgba(255,255,255,0.22);
+  border-radius:999px;
   overflow:hidden;
 }
 
-.progress-bar span{
-  display:block;
+.track div{
   height:100%;
   width:0;
-  background:#4db5ff;
-  transition:1s ease;
+  background:linear-gradient(90deg,#31d07d,#4db5ff);
+  transition:width .9s ease;
 }
 
-.status{
-  font-size:12px;
-  margin-top:5px;
+.skill-bottom{
+  margin-top:9px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.status.completed{
-  color:green;
+.percent{
+  font-size:13px;
 }
 
-.status.progress{
-  color:#4db5ff;
+.empty{
+  text-align:center;
+  padding:18px;
+  border-radius:14px;
+  background:rgba(255,255,255,0.12);
+  border:1px dashed rgba(255,255,255,0.3);
 }
 
-.status.low{
-  color:red;
+.footer{
+  margin-top:20px;
+  text-align:center;
 }
 
-@media(max-width:600px){
-  .navbar{
-    flex-direction:column;
-    height:auto;
-    gap:10px;
-    padding:15px;
+@media(max-width:740px){
+  .toolbar{
+    grid-template-columns:1fr;
   }
 }
 </style>
 </head>
 
 <body>
+<div class="page">
+  <div class="header">
+    <div>
+      <h1>Progress Dashboard</h1>
+      <p>Validated tracking from your saved skills with animated bars and live summary metrics.</p>
+    </div>
+    <button class="btn btn-light" onclick="goDashboard()"><i class="fa fa-home"></i> Dashboard</button>
+  </div>
 
-<div class="navbar">
-  SkillVault - Progress
-  <button onclick="goDashboard()">← Dashboard</button>
-</div>
-
-<div class="main">
+  <div id="dataNotice" class="notice"></div>
 
   <div class="summary">
-    <div class="summary-box">
-      <h3>Total Skills</h3>
-      <p id="totalSkills">0</p>
-    </div>
-    <div class="summary-box">
-      <h3>Completed</h3>
-      <p id="completedSkills">0</p>
-    </div>
-    <div class="summary-box">
-      <h3>In Progress</h3>
-      <p id="progressSkills">0</p>
-    </div>
-    <div class="summary-box">
-      <h3>Overall Progress</h3>
-      <p id="overallProgress">0%</p>
-    </div>
+    <div class="summary-card"><p>Total Skills</p><h2 id="sumTotal">0</h2></div>
+    <div class="summary-card"><p>Completed</p><h2 id="sumDone">0</h2></div>
+    <div class="summary-card"><p>In Progress</p><h2 id="sumInProgress">0</h2></div>
+    <div class="summary-card"><p>Needs Focus</p><h2 id="sumLow">0</h2></div>
+    <div class="summary-card"><p>Average Progress</p><h2 id="sumAvg">0%</h2></div>
+    <div class="summary-card"><p>Total Hours</p><h2 id="sumHours">0</h2></div>
   </div>
 
-  <div class="skill-section">
-    <h2>Skill Progress</h2><br>
-    <div id="skillContainer"></div>
+  <div class="toolbar">
+    <input id="searchInput" type="text" placeholder="Search skill name">
+    <select id="statusFilter">
+      <option value="">All Status</option>
+      <option value="Completed">Completed</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Needs Focus">Needs Focus</option>
+    </select>
+    <select id="sortBy">
+      <option value="progress-desc">Sort: Progress High-Low</option>
+      <option value="progress-asc">Sort: Progress Low-High</option>
+      <option value="hours-desc">Sort: Hours High-Low</option>
+      <option value="name-asc">Sort: Name A-Z</option>
+    </select>
   </div>
 
+  <div id="skillsGrid" class="skills"></div>
+
+  <div class="footer">
+    <button class="btn btn-light" onclick="history.back()"><i class="fa fa-arrow-left"></i> Back</button>
+  </div>
 </div>
 
 <script>
+const SKILLS_KEY = "skillvaultSkills";
+const allowedStatuses = ["Planned", "In Progress", "Completed"];
+let validatedSkills = [];
 
-/* Skill Data */
-const skills = [
-  { name: "HTML", percent: 90 },
-  { name: "CSS", percent: 75 },
-  { name: "JavaScript", percent: 60 },
-  { name: "React", percent: 40 }
-];
+const searchInput = document.getElementById("searchInput");
+const statusFilter = document.getElementById("statusFilter");
+const sortBy = document.getElementById("sortBy");
 
-/* Validate Percentage */
-function isValidPercent(value){
-  return typeof value === "number" && value >= 0 && value <= 100;
+function safeParse(value){
+  try{
+    return JSON.parse(value);
+  }catch{
+    return null;
+  }
 }
 
-window.onload = function(){
+function toInt(value){
+  const num = Number(value);
+  return Number.isFinite(num) ? Math.round(num) : 0;
+}
 
-  const container = document.getElementById("skillContainer");
+function clamp(num,min,max){
+  return Math.max(min, Math.min(max, num));
+}
 
-  let total = skills.length;
-  let completed = 0;
-  let inProgress = 0;
-  let totalPercent = 0;
+function classify(progress){
+  if(progress >= 80){ return "Completed"; }
+  if(progress >= 40){ return "In Progress"; }
+  return "Needs Focus";
+}
 
-  skills.forEach(skill => {
+function sanitizeSkills(raw){
+  const issues = [];
+  if(!Array.isArray(raw)){
+    issues.push("Skills data not found. Add data in Skills page first.");
+    return { list: [], issues: issues };
+  }
 
-    if(!isValidPercent(skill.percent)){
-      alert("Invalid percentage for " + skill.name);
-      return;
+  const list = raw.map((item, index) => {
+    const name = String(item && item.name ? item.name : "Skill " + (index + 1)).trim();
+    const progress = clamp(toInt(item && item.progress), 0, 100);
+    const hours = clamp(toInt(item && item.hours), 0, 1000);
+    const incomingStatus = String(item && item.status ? item.status : "Planned");
+    const status = allowedStatuses.includes(incomingStatus) ? incomingStatus : "Planned";
+    const mapped = classify(progress);
+
+    if(name.length === 0){
+      issues.push("Empty skill names were normalized.");
+    }
+    if(incomingStatus !== status){
+      issues.push("Invalid statuses were normalized.");
+    }
+    if(toInt(item && item.progress) !== progress){
+      issues.push("Progress values out of range were clamped.");
+    }
+    if(toInt(item && item.hours) !== hours){
+      issues.push("Hours values out of range were clamped.");
     }
 
-    totalPercent += skill.percent;
-
-    let statusClass = "";
-    let statusText = "";
-
-    if(skill.percent >= 80){
-      completed++;
-      statusText = "✔ Completed";
-      statusClass = "completed";
-    }else if(skill.percent >= 40){
-      inProgress++;
-      statusText = "⏳ In Progress";
-      statusClass = "progress";
-    }else{
-      inProgress++;
-      statusText = "⚠ Needs Improvement";
-      statusClass = "low";
-    }
-
-    const skillDiv = document.createElement("div");
-    skillDiv.className = "skill";
-
-    skillDiv.innerHTML = `
-      <div class="skill-header">
-        <span>${skill.name}</span>
-        <span>${skill.percent}%</span>
-      </div>
-      <div class="progress-bar">
-        <span data-value="${skill.percent}"></span>
-      </div>
-      <div class="status ${statusClass}">${statusText}</div>
-    `;
-
-    container.appendChild(skillDiv);
+    return {
+      name: name || "Unnamed Skill",
+      progress: progress,
+      hours: hours,
+      status: status,
+      displayStatus: mapped
+    };
   });
 
-  // Animate Bars
-  setTimeout(()=>{
-    document.querySelectorAll(".progress-bar span").forEach(bar=>{
-      bar.style.width = bar.dataset.value + "%";
+  return { list: list, issues: [...new Set(issues)] };
+}
+
+function animateValue(el, end, suffix){
+  const duration = 600;
+  const start = 0;
+  const startTime = performance.now();
+  function step(now){
+    const t = Math.min(1, (now - startTime) / duration);
+    const current = Math.round(start + ((end - start) * t));
+    el.textContent = String(current) + (suffix || "");
+    if(t < 1){
+      requestAnimationFrame(step);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+function updateSummary(skills){
+  const total = skills.length;
+  const done = skills.filter(s => s.displayStatus === "Completed").length;
+  const progressCount = skills.filter(s => s.displayStatus === "In Progress").length;
+  const low = skills.filter(s => s.displayStatus === "Needs Focus").length;
+  const avg = total ? Math.round(skills.reduce((sum, s) => sum + s.progress, 0) / total) : 0;
+  const hours = skills.reduce((sum, s) => sum + s.hours, 0);
+
+  animateValue(document.getElementById("sumTotal"), total, "");
+  animateValue(document.getElementById("sumDone"), done, "");
+  animateValue(document.getElementById("sumInProgress"), progressCount, "");
+  animateValue(document.getElementById("sumLow"), low, "");
+  animateValue(document.getElementById("sumAvg"), avg, "%");
+  animateValue(document.getElementById("sumHours"), hours, "");
+}
+
+function sortSkills(skills){
+  const mode = sortBy.value;
+  const clone = skills.slice();
+  if(mode === "progress-asc"){ return clone.sort((a,b) => a.progress - b.progress); }
+  if(mode === "hours-desc"){ return clone.sort((a,b) => b.hours - a.hours); }
+  if(mode === "name-asc"){ return clone.sort((a,b) => a.name.localeCompare(b.name)); }
+  return clone.sort((a,b) => b.progress - a.progress);
+}
+
+function render(skills){
+  const grid = document.getElementById("skillsGrid");
+  grid.textContent = "";
+
+  if(skills.length === 0){
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "No matching skills to display.";
+    grid.appendChild(empty);
+    return;
+  }
+
+  skills.forEach(skill => {
+    const card = document.createElement("div");
+    card.className = "skill";
+
+    const head = document.createElement("div");
+    head.className = "skill-head";
+
+    const title = document.createElement("h3");
+    title.textContent = skill.name;
+
+    const chip = document.createElement("span");
+    chip.className = "chip";
+    chip.textContent = skill.displayStatus;
+
+    head.appendChild(title);
+    head.appendChild(chip);
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent = "Hours: " + skill.hours + " | Stored Status: " + skill.status;
+
+    const track = document.createElement("div");
+    track.className = "track";
+
+    const bar = document.createElement("div");
+    bar.dataset.value = String(skill.progress);
+    track.appendChild(bar);
+
+    const bottom = document.createElement("div");
+    bottom.className = "skill-bottom";
+    const txt = document.createElement("span");
+    txt.className = "percent";
+    txt.textContent = skill.progress + "% complete";
+    bottom.appendChild(txt);
+
+    card.appendChild(head);
+    card.appendChild(meta);
+    card.appendChild(track);
+    card.appendChild(bottom);
+    grid.appendChild(card);
+  });
+
+  animateBars();
+}
+
+function animateBars(){
+  const bars = document.querySelectorAll(".track div");
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const value = clamp(toInt(entry.target.dataset.value), 0, 100);
+        requestAnimationFrame(() => {
+          entry.target.style.width = value + "%";
+        });
+        obs.unobserve(entry.target);
+      }
     });
-  },200);
+  }, { threshold: 0.2 });
 
-  // Calculate Overall
-  const overall = Math.round(totalPercent / total);
+  bars.forEach(bar => observer.observe(bar));
+}
 
-  document.getElementById("totalSkills").textContent = total;
-  document.getElementById("completedSkills").textContent = completed;
-  document.getElementById("progressSkills").textContent = inProgress;
-  document.getElementById("overallProgress").textContent = overall + "%";
+function applyFilters(){
+  const text = searchInput.value.trim().toLowerCase();
+  const status = statusFilter.value;
 
-};
+  let list = validatedSkills.filter(skill => {
+    if(text && !skill.name.toLowerCase().includes(text)){ return false; }
+    if(status && skill.displayStatus !== status){ return false; }
+    return true;
+  });
 
-/* Dashboard Button */
+  list = sortSkills(list);
+  updateSummary(list);
+  render(list);
+}
+
 function goDashboard(){
   window.location.href = "dashboard.html";
 }
 
-</script>
+const parsed = safeParse(localStorage.getItem(SKILLS_KEY));
+const result = sanitizeSkills(parsed);
+validatedSkills = result.list;
 
+if(result.issues.length){
+  document.getElementById("dataNotice").textContent = "Validation: " + result.issues.join(" ");
+}
+
+[searchInput, statusFilter, sortBy].forEach(el => {
+  el.addEventListener("input", applyFilters);
+  el.addEventListener("change", applyFilters);
+});
+
+applyFilters();
+</script>
 </body>
 </html>

@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="auth.js"></script>
+<script>redirectIfAuthenticated("dashboard.html");</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline'; font-src 'self' https://cdnjs.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests">
 
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 
@@ -152,7 +155,7 @@ body{
   <div class="logo">Skill<span>Vault</span></div>
   <p>Create your account to start learning</p>
 
-  <form onsubmit="return registerUser()">
+  <form onsubmit="event.preventDefault(); registerUser();">
 
     <div class="input-group">
       <label>Full Name</label>
@@ -190,7 +193,25 @@ body{
 
 <script>
 
-function registerUser(){
+function arrayBufferToHex(buffer){
+  return Array.from(new Uint8Array(buffer))
+    .map(byte => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function generateSalt(length){
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  return btoa(String.fromCharCode(...bytes));
+}
+
+async function hashPassword(password, salt){
+  const encoded = new TextEncoder().encode(password + salt);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
+  return arrayBufferToHex(hashBuffer);
+}
+
+async function registerUser(){
 
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
@@ -236,20 +257,24 @@ function registerUser(){
 
   if(!isValid){
     shakeBox();
-    return false;
+    return;
   }
 
   let users = JSON.parse(localStorage.getItem("skillvaultUsers")) || [];
 
   if(users.find(user => user.email === email)){
     emailError.textContent="Email already registered";
-    return false;
+    return;
   }
+
+  const passwordSalt = generateSalt(16);
+  const passwordHash = await hashPassword(password, passwordSalt);
 
   users.push({
     name:name,
     email:email,
-    password:password
+    passwordHash:passwordHash,
+    passwordSalt:passwordSalt
   });
 
   localStorage.setItem("skillvaultUsers", JSON.stringify(users));
@@ -259,8 +284,6 @@ function registerUser(){
   setTimeout(()=>{
     window.location.href="login.html";
   },1500);
-
-  return false;
 }
 
 function shakeBox(){
@@ -274,3 +297,4 @@ function shakeBox(){
 
 </body>
 </html>
+
