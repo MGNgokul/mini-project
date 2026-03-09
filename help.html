@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 
 <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 
@@ -206,8 +208,8 @@ function toggleFaq(index){
 <div class="top-nav">
   <div class="logo">SkillVault</div>
   <div>
-    <a href="landing.html">Home</a>
-    <a href="login.html">Logout</a>
+    <a href="dashboard.html">Home</a>
+    <a href="login.html" data-logout-link>Logout</a>
   </div>
 </div>
 

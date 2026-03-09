@@ -192,25 +192,6 @@ body{
 </div>
 
 <script>
-
-function arrayBufferToHex(buffer){
-  return Array.from(new Uint8Array(buffer))
-    .map(byte => byte.toString(16).padStart(2, "0"))
-    .join("");
-}
-
-function generateSalt(length){
-  const bytes = new Uint8Array(length);
-  crypto.getRandomValues(bytes);
-  return btoa(String.fromCharCode(...bytes));
-}
-
-async function hashPassword(password, salt){
-  const encoded = new TextEncoder().encode(password + salt);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
-  return arrayBufferToHex(hashBuffer);
-}
-
 async function registerUser(){
 
   const name = document.getElementById("name").value.trim();
@@ -230,9 +211,6 @@ async function registerUser(){
   confirmError.textContent="";
   successMsg.textContent="";
 
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  const strongPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
-
   let isValid = true;
 
   if(name===""){
@@ -240,12 +218,12 @@ async function registerUser(){
     isValid=false;
   }
 
-  if(!emailPattern.test(email)){
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
     emailError.textContent="Enter valid email address";
     isValid=false;
   }
 
-  if(!strongPassword.test(password)){
+  if(!window.SkillVaultAuth.validatePasswordStrength(password)){
     passwordError.textContent="Min 6 chars, 1 uppercase, 1 number";
     isValid=false;
   }
@@ -260,24 +238,22 @@ async function registerUser(){
     return;
   }
 
-  let users = JSON.parse(localStorage.getItem("skillvaultUsers")) || [];
-
-  if(users.find(user => user.email === email)){
-    emailError.textContent="Email already registered";
-    return;
-  }
-
-  const passwordSalt = generateSalt(16);
-  const passwordHash = await hashPassword(password, passwordSalt);
-
-  users.push({
+  const result = await window.SkillVaultAuth.register({
     name:name,
     email:email,
-    passwordHash:passwordHash,
-    passwordSalt:passwordSalt
+    password:password,
+    confirmPassword:confirmPassword
   });
 
-  localStorage.setItem("skillvaultUsers", JSON.stringify(users));
+  if(!result.ok){
+    if(result.code === "email-exists"){
+      emailError.textContent = "Email already registered";
+    }else{
+      confirmError.textContent = result.message || "Could not create account";
+    }
+    shakeBox();
+    return;
+  }
 
   successMsg.textContent="Registration successful! Redirecting to login...";
 

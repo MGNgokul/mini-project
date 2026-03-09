@@ -7,6 +7,8 @@
 <link rel="icon" type="image/png" sizes="16x16" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 <link rel="apple-touch-icon" sizes="180x180" href="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg">
 <meta name="theme-color" content="#1e1e2f">
+<script src="auth.js"></script>
+<script>redirectIfAuthenticated("dashboard.html");</script>
 <title>Login | SkillVault</title>
 
 <style>
@@ -106,6 +108,12 @@ body{
   color:#ffd1d1;
   margin-top:5px;
   min-height:14px;
+}
+
+.error.global{
+  margin-top:0;
+  margin-bottom:8px;
+  text-align:center;
 }
 
 .login-btn{
@@ -244,16 +252,17 @@ body{
   <div class="logo">Skill<span>Vault</span></div>
   <p class="subtitle">Login to track your skills and progress</p>
 
-  <form onsubmit="return validateForm()">
+  <form id="loginForm" novalidate>
+    <div class="error global" id="globalError"></div>
     <div class="input-group">
       <label>Email</label>
-      <input type="text" id="email" placeholder="Enter email">
+      <input type="email" id="email" placeholder="Enter email" autocomplete="username">
       <div class="error" id="emailError"></div>
     </div>
 
     <div class="input-group">
       <label>Password</label>
-      <input type="password" id="password" placeholder="Enter password">
+      <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
       <div class="error" id="passwordError"></div>
     </div>
 
@@ -267,141 +276,106 @@ body{
 </div>
 
 <script>
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const emailError = document.getElementById("emailError");
-const passwordError = document.getElementById("passwordError");
+(()=>{
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const loginForm = document.getElementById("loginForm");
+  const emailError = document.getElementById("emailError");
+  const passwordError = document.getElementById("passwordError");
+  const globalError = document.getElementById("globalError");
+  const loginBtn = document.querySelector(".login-btn");
 
-/* Real-time validation */
-emailInput.addEventListener("input", function(){
-  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-  if(emailInput.value.trim()===""){
-    emailError.textContent="Email is required";
-  }else if(!pattern.test(emailInput.value.trim())){
-    emailError.textContent="Enter valid email format";
-  }else{
-    emailError.textContent="";
-  }
-});
-
-passwordInput.addEventListener("input", function(){
-  const strong = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
-
-  if(passwordInput.value.trim()===""){
-    passwordError.textContent="Password is required";
-  }else if(!strong.test(passwordInput.value.trim())){
-    passwordError.textContent="Min 6 chars, 1 uppercase, 1 number";
-  }else{
-    passwordError.textContent="";
-  }
-});
-
-/* Submit Validation */
-function validateForm(){
-
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-  const strong = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
-  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-  emailError.textContent = "";
-  passwordError.textContent = "";
-
-  if(email === ""){
-    emailError.textContent = "Email is required";
-    shakeBox();
-    return false;
+  function clearErrors(){
+    emailError.textContent = "";
+    passwordError.textContent = "";
+    globalError.textContent = "";
   }
 
-  if(password === ""){
-    passwordError.textContent = "Password is required";
-    shakeBox();
-    return false;
+  function shakeBox(){
+    const box = document.querySelector(".login-layout");
+    box.animate(
+      [
+        { transform: "translateX(0)" },
+        { transform: "translateX(-4px)" },
+        { transform: "translateX(4px)" },
+        { transform: "translateX(0)" }
+      ],
+      { duration: 220, easing: "ease" }
+    );
   }
 
-  if(!pattern.test(email)){
-    emailError.textContent = "Enter valid email format";
-    shakeBox();
-    return false;
-  }
+  function validateInputs(){
+    clearErrors();
+    const email = emailInput.value.trim().toLowerCase();
+    const password = passwordInput.value.trim();
+    let isValid = true;
 
-  if(!strong.test(password)){
-    passwordError.textContent = "Invalid password format";
-    shakeBox();
-    return false;
-  }
-
-  validateCredentials(email, password);
-  return false;
-}
-
-function arrayBufferToHex(buffer){
-  return Array.from(new Uint8Array(buffer))
-    .map(byte => byte.toString(16).padStart(2, "0"))
-    .join("");
-}
-
-async function hashPassword(password, salt){
-  const encoded = new TextEncoder().encode(password + salt);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
-  return arrayBufferToHex(hashBuffer);
-}
-
-async function validateCredentials(email, password){
-  const users = JSON.parse(localStorage.getItem("skillvaultUsers")) || [];
-  let validUser = null;
-
-  for(const user of users){
-    if(user.email !== email){
-      continue;
+    if(!email){
+      emailError.textContent = "Email is required";
+      isValid = false;
+    }else if(!emailPattern.test(email)){
+      emailError.textContent = "Enter valid email format";
+      isValid = false;
     }
 
-    if(user.passwordHash && user.passwordSalt){
-      const currentHash = await hashPassword(password, user.passwordSalt);
-      if(currentHash === user.passwordHash){
-        validUser = user;
+    if(!password){
+      passwordError.textContent = "Password is required";
+      isValid = false;
+    }
+
+    if(!isValid){
+      shakeBox();
+    }
+
+    return { isValid: isValid, email: email, password: password };
+  }
+
+  emailInput.addEventListener("input", function(){
+    const value = emailInput.value.trim().toLowerCase();
+    emailError.textContent = value && !emailPattern.test(value) ? "Enter valid email format" : "";
+    globalError.textContent = "";
+  });
+
+  passwordInput.addEventListener("input", function(){
+    passwordError.textContent = passwordInput.value.trim() ? "" : "Password is required";
+    globalError.textContent = "";
+  });
+
+  loginForm.addEventListener("submit", async function(event){
+    event.preventDefault();
+
+    const result = validateInputs();
+    if(!result.isValid){
+      return;
+    }
+
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Signing in...";
+
+    try{
+      const response = await window.SkillVaultAuth.login(result.email, result.password);
+      if(!response.ok){
+        if(response.code === "invalid-credentials"){
+          passwordError.textContent = "Invalid email or password";
+        }else{
+          globalError.textContent = response.message || "Unable to login. Please try again.";
+        }
+        shakeBox();
+        return;
       }
-      break;
+
+      window.location.replace("dashboard.html");
+    }catch{
+      globalError.textContent = "Unexpected error. Please try again.";
+      shakeBox();
+    }finally{
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Login";
     }
-
-    if(user.password && user.password === password){
-      validUser = user;
-      break;
-    }
-  }
-
-  if(validUser){
-    const userData = {
-      email: validUser.email,
-      name: validUser.name,
-      role: "student",
-      loginAt: Date.now(),
-      loginTime: new Date().toLocaleString(),
-      isLoggedIn: true
-    };
-
-    localStorage.setItem("skillvaultUser", JSON.stringify(userData));
-    window.location.href = "dashboard.html";
-    return;
-  }
-
-  passwordError.textContent = "Invalid email or password";
-  shakeBox();
-}
-
-function shakeBox(){
-  const box = document.querySelector(".login-layout");
-  box.animate(
-    [
-      { transform: "translateX(0)" },
-      { transform: "translateX(-4px)" },
-      { transform: "translateX(4px)" },
-      { transform: "translateX(0)" }
-    ],
-    { duration: 220, easing: "ease" }
-  );
-}
+  });
+})();
 
 </script>
 
