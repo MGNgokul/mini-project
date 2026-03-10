@@ -133,12 +133,14 @@ body{
 }
 
 .btn{
+  display:inline-block;
   padding:15px 45px;
   font-size:16px;
   border:none;
   border-radius:50px;
   background:#4db5ff;
   color:white;
+  text-decoration:none;
   cursor:pointer;
   transition:0.3s;
   box-shadow:0 0 15px rgba(77,181,255,0.6);
@@ -259,6 +261,7 @@ body{
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="login.html">Login</a>
+    <a href="register.html">Register</a>
   </div>
 </div>
 
@@ -266,9 +269,7 @@ body{
   <div class="card">
     <h1>Track Skills. Build Career.</h1>
     <p>Your personal dashboard to learn, track, and grow your skills</p>
-    <a href="login.html">
-      <button class="btn">Get Started</button>
-    </a>
+    <a href="./login.html" class="btn">Get Started</a>
   </div>
 </div>
 
@@ -311,5 +312,12 @@ const observer = new IntersectionObserver((entries) => {
 overviewItems.forEach((item) => observer.observe(item));
 </script>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script src="realtime-config.js"></script>
+<script src="realtime-sync.js"></script>
 </body>
 </html>
+
+
+

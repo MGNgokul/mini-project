@@ -270,6 +270,7 @@ body{
   </form>
 
   <div class="links">
+    <a href="index.html">Home</a> |
     <a href="forgot-password.html">Forgot Password?</a> |
     <a href="register.html">Create Account</a>
   </div>
@@ -323,6 +324,9 @@ body{
     if(!password){
       passwordError.textContent = "Password is required";
       isValid = false;
+    }else if(!window.SkillVaultAuth.validatePasswordStrength(password)){
+      passwordError.textContent = "Min 6 chars, 1 uppercase, 1 number";
+      isValid = false;
     }
 
     if(!isValid){
@@ -339,7 +343,14 @@ body{
   });
 
   passwordInput.addEventListener("input", function(){
-    passwordError.textContent = passwordInput.value.trim() ? "" : "Password is required";
+    const value = passwordInput.value.trim();
+    if(!value){
+      passwordError.textContent = "Password is required";
+    }else if(!window.SkillVaultAuth.validatePasswordStrength(value)){
+      passwordError.textContent = "Min 6 chars, 1 uppercase, 1 number";
+    }else{
+      passwordError.textContent = "";
+    }
     globalError.textContent = "";
   });
 
@@ -379,5 +390,12 @@ body{
 
 </script>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script src="realtime-config.js"></script>
+<script src="realtime-sync.js"></script>
 </body>
 </html>
+
+
+

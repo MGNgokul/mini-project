@@ -294,7 +294,7 @@
     });
 
     const style = document.createElement("style");
-    style.textContent = ".sv-floating-logout{position:fixed;top:16px;right:16px;z-index:1000;border:none;border-radius:999px;padding:10px 16px;background:#e74c3c;color:#fff;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.2)}.sv-floating-logout:hover{background:#c0392b}.sv-floating-logout:focus-visible{outline:2px solid #fff;outline-offset:2px}@media(max-width:480px){.sv-floating-logout{top:10px;right:10px;padding:9px 12px;font-size:12px}}";
+    style.textContent = ".sv-floating-logout{position:fixed !important;top:16px !important;right:16px !important;z-index:2147483647 !important;border:none;border-radius:999px;padding:10px 16px;background:#e74c3c;color:#fff;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.2)}.sv-floating-logout:hover{background:#c0392b}.sv-floating-logout:focus-visible{outline:2px solid #fff;outline-offset:2px}@media(max-width:600px){.sv-floating-logout{top:auto !important;bottom:14px !important;right:12px !important;padding:9px 12px;font-size:12px}}";
 
     document.head.appendChild(style);
     document.body.appendChild(button);

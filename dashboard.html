@@ -32,6 +32,22 @@ body{
   background:#1e1e2f;
   color:white;
   letter-spacing:1px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.mobile-menu-toggle{
+  display:none;
+  border:1px solid rgba(255,255,255,0.35);
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  font-size:18px;
+  cursor:pointer;
 }
 
 .dashboard-grid{
@@ -46,6 +62,10 @@ body{
   padding:20px 0;
   display:flex;
   flex-direction:column;
+}
+
+.mobile-menu-overlay{
+  display:none;
 }
 
 .sidebar a{
@@ -212,6 +232,47 @@ body{
     padding:12px;
   }
 }
+
+@media(max-width:600px){
+  .mobile-menu-toggle{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    height:100vh;
+    width:270px;
+    z-index:2200;
+    transform:translateX(-108%);
+    transition:transform .25s ease;
+    overflow-y:auto;
+    padding-top:70px;
+    flex-direction:column;
+  }
+  body.menu-open .sidebar{
+    transform:translateX(0);
+  }
+  .mobile-menu-overlay{
+    display:block;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    z-index:2100;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  body.menu-open .mobile-menu-overlay{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .main{
+    padding:20px 14px 90px;
+  }
+}
 </style>
 
 <script>
@@ -225,7 +286,12 @@ window.onload=()=>{
 </head>
 <body>
 
-<div class="navbar">SkillVault Dashboard</div>
+<div class="navbar">
+  <span>SkillVault Dashboard</span>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+</div>
+
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"></div>
 
 <div class="dashboard-grid">
 
@@ -295,5 +361,48 @@ window.onload=()=>{
   <button onclick="window.location.href='dashboard.html'">← Back</button>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script src="realtime-config.js"></script>
+<script src="realtime-sync.js"></script>
+<script>
+(()=>{
+  const menuButton = document.getElementById("mobileMenuToggle");
+  const overlay = document.getElementById("mobileMenuOverlay");
+  const sidebar = document.querySelector(".sidebar");
+  if(!menuButton || !overlay || !sidebar){
+    return;
+  }
+
+  function setMenuOpen(isOpen){
+    document.body.classList.toggle("menu-open", isOpen);
+    menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  }
+
+  menuButton.addEventListener("click", function(){
+    const isOpen = document.body.classList.contains("menu-open");
+    setMenuOpen(!isOpen);
+  });
+
+  overlay.addEventListener("click", function(){
+    setMenuOpen(false);
+  });
+
+  sidebar.querySelectorAll("a").forEach(function(link){
+    link.addEventListener("click", function(){
+      setMenuOpen(false);
+    });
+  });
+
+  window.addEventListener("resize", function(){
+    if(window.innerWidth > 600){
+      setMenuOpen(false);
+    }
+  });
+})();
+</script>
 </body> 
  </html>
+
+
+
