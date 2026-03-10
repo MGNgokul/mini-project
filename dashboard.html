@@ -234,10 +234,20 @@ body{
 }
 
 @media(max-width:600px){
+  .navbar{
+    position:sticky;
+    top:0;
+    z-index:2000;
+    padding:14px 14px 14px 64px;
+  }
   .mobile-menu-toggle{
     display:inline-flex;
     align-items:center;
     justify-content:center;
+    position:fixed;
+    top:10px;
+    left:10px;
+    z-index:2300;
   }
   .sidebar{
     position:fixed;
@@ -287,8 +297,8 @@ window.onload=()=>{
 <body>
 
 <div class="navbar">
-  <span>SkillVault Dashboard</span>
   <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+  <span>SkillVault Dashboard</span>
 </div>
 
 <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"></div>
@@ -403,6 +413,8 @@ window.onload=()=>{
 </script>
 </body> 
  </html>
+
+
 
 
 
