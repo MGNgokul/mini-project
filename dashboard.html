@@ -38,6 +38,34 @@ body{
   gap:12px;
 }
 
+.navbar-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.navbar-logo{
+  display:none;
+}
+
+.navbar-profile{
+  display:none;
+}
+
+.navbar-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.navbar-logout{
+  display:none;
+}
+
+.navbar-icon{
+  display:none;
+}
+
 .mobile-menu-toggle{
   display:none;
   border:1px solid rgba(255,255,255,0.35);
@@ -104,6 +132,18 @@ body{
   padding:30px;
   display:grid;
   gap:30px;
+}
+
+.mobile-section-nav{
+  display:none;
+}
+
+.mobile-kpi-dots{
+  display:none;
+}
+
+.mobile-bottom-nav{
+  display:none;
 }
 
 .kpi-grid{
@@ -234,53 +274,158 @@ body{
 }
 
 @media(max-width:600px){
+  body{
+    padding-bottom:88px;
+  }
   .navbar{
     position:sticky;
     top:0;
     z-index:2000;
-    padding:14px 14px 14px 64px;
+    padding:14px 16px;
+    background:#ffffff;
+    color:#172230;
+    letter-spacing:0;
+    font-size:20px;
+    border-bottom:1px solid #dbe4ed;
+    box-shadow:0 4px 18px rgba(15,32,39,0.06);
+    justify-content:space-between;
   }
-  .mobile-menu-toggle{
+  .navbar-logo{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    position:fixed;
-    top:10px;
-    left:10px;
-    z-index:2300;
+    text-decoration:none;
+    gap:10px;
+    flex-shrink:0;
+  }
+  .navbar-logo img{
+    width:38px;
+    height:38px;
+    object-fit:cover;
+    border-radius:12px;
+    border:1px solid #dbe4ed;
+    background:#fff;
+  }
+  .navbar-logo span{
+    display:inline-block;
+    color:#172230;
+    font-size:18px;
+    font-weight:700;
+    line-height:1;
+  }
+  .navbar-logout{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    background:#eef3f8;
+    color:#172230;
+    border-radius:999px;
+    padding:9px 14px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .navbar-title{
+    display:none;
+  }
+  .mobile-menu-toggle{
+    display:none;
+  }
+  .navbar-profile{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#172230;
+    border:1px solid #cfd9e3;
+    background:#f8fbfd;
+    font-size:20px;
+    flex-shrink:0;
+  }
+  .navbar-actions{
+    gap:8px;
+  }
+  .navbar-icon{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#172230;
+    border:1px solid #cfd9e3;
+    background:#f8fbfd;
+    font-size:18px;
+    flex-shrink:0;
   }
   .sidebar{
-    position:fixed;
-    top:0;
-    left:0;
-    height:100vh;
-    width:270px;
-    z-index:2200;
-    transform:translateX(-108%);
-    transition:transform .25s ease;
-    overflow-y:auto;
-    padding-top:70px;
-    flex-direction:column;
-  }
-  body.menu-open .sidebar{
-    transform:translateX(0);
+    display:none;
   }
   .mobile-menu-overlay{
-    display:block;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.45);
-    z-index:2100;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .25s ease;
-  }
-  body.menu-open .mobile-menu-overlay{
-    opacity:1;
-    pointer-events:auto;
+    display:none;
   }
   .main{
-    padding:20px 14px 90px;
+    padding:20px 14px 96px;
+  }
+  .mobile-section-nav{
+    display:none;
+  }
+  .mobile-kpi-dots{
+    display:none;
+  }
+  .kpi-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .kpi{
+    min-width:0;
+    border-radius:16px;
+    text-align:left;
+  }
+  .mobile-bottom-nav{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:2400;
+    background:#ffffff;
+    border-top:1px solid #dbe4ed;
+    padding:8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    box-shadow:0 -10px 24px rgba(15,32,39,0.08);
+  }
+  .mobile-bottom-nav a{
+    text-decoration:none;
+    color:#607284;
+    border-radius:0;
+    min-height:52px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0;
+  }
+  .mobile-bottom-nav a i{
+    font-size:21px;
+  }
+  .mobile-bottom-nav a span{
+    display:none;
+  }
+  .mobile-bottom-nav a.active{
+    background:transparent;
+    color:#172230;
+  }
+  .back-btn{
+    display:none;
   }
 }
 </style>
@@ -290,18 +435,96 @@ window.onload=()=>{
   document.querySelectorAll(".progress span").forEach(bar=>{
     bar.style.width=bar.dataset.value+"%";
   });
+
+  if(window.innerWidth > 600){
+    return;
+  }
+
+  const nav = document.getElementById("mobileSectionNav");
+  const sectionButtons = nav ? Array.from(nav.querySelectorAll("button[data-target]")) : [];
+  const sections = sectionButtons
+    .map(btn => document.getElementById(btn.dataset.target))
+    .filter(Boolean);
+
+  sectionButtons.forEach(btn => {
+    btn.addEventListener("click", function(){
+      const target = document.getElementById(btn.dataset.target);
+      if(!target){
+        return;
+      }
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      sectionButtons.forEach(item => item.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  if("IntersectionObserver" in window && sections.length){
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting){
+          return;
+        }
+        sectionButtons.forEach(function(btn){
+          btn.classList.toggle("active", btn.dataset.target === entry.target.id);
+        });
+      });
+    }, { threshold: 0.45 });
+
+    sections.forEach(function(section){ observer.observe(section); });
+  }
+
+  const kpiGrid = document.querySelector(".kpi-grid");
+  const kpiCards = kpiGrid ? Array.from(kpiGrid.querySelectorAll(".kpi")) : [];
+  const dotsWrap = document.getElementById("mobileKpiDots");
+  if(kpiGrid && kpiCards.length && dotsWrap){
+    dotsWrap.textContent = "";
+    const dots = kpiCards.map(function(_, idx){
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.setAttribute("aria-label", "Go to stats card " + (idx + 1));
+      dot.addEventListener("click", function(){
+        const targetCard = kpiCards[idx];
+        if(targetCard){
+          targetCard.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+        }
+      });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    function updateDots(){
+      const cardWidth = kpiCards[0].offsetWidth + 12;
+      const active = Math.max(0, Math.min(kpiCards.length - 1, Math.round(kpiGrid.scrollLeft / cardWidth)));
+      dots.forEach(function(dot, idx){
+        dot.classList.toggle("active", idx === active);
+      });
+    }
+
+    kpiGrid.addEventListener("scroll", updateDots, { passive: true });
+    updateDots();
+  }
 }
 </script>
 
 </head>
-<body>
+<body data-sv-no-floating-logout="true">
 
 <div class="navbar">
-  <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
-  <span>SkillVault Dashboard</span>
+  <a class="navbar-logo" href="dashboard.html" aria-label="SkillVault Home">
+    <img src="https://static.vecteezy.com/system/resources/previews/011/482/188/non_2x/driving-school-logo-design-steering-wheel-with-cog-and-book-icon-free-vector.jpg" alt="SkillVault logo">
+    <span>Dashboard</span>
+  </a>
+  <span class="navbar-title">Dashboard</span>
+  <div class="navbar-actions">
+    <button type="button" class="navbar-logout" data-logout>Logout</button>
+    <a class="navbar-icon" href="help.html" aria-label="Notifications">
+      <i class="fa-regular fa-bell"></i>
+    </a>
+    <a class="navbar-profile" href="profile.html" aria-label="Profile">
+      <i class="fa-regular fa-circle-user"></i>
+    </a>
+  </div>
 </div>
-
-<div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"></div>
 
 <div class="dashboard-grid">
 
@@ -319,8 +542,13 @@ window.onload=()=>{
   </div>
 
   <div class="main">
+    <div class="mobile-section-nav" id="mobileSectionNav" aria-label="Dashboard sections">
+      <button type="button" data-target="kpiSection" class="active">Stats</button>
+      <button type="button" data-target="progressSection">Progress</button>
+      <button type="button" data-target="activitySection">Activity</button>
+    </div>
 
-    <div class="kpi-grid">
+    <div class="kpi-grid" id="kpiSection">
       <div class="kpi">
         <i class="fa fa-layer-group"></i>
         <h4>Total Skills</h4>
@@ -343,7 +571,9 @@ window.onload=()=>{
       </div>
     </div>
 
-    <div class="progress-grid">
+    <div class="mobile-kpi-dots" id="mobileKpiDots" aria-hidden="true"></div>
+
+    <div class="progress-grid" id="progressSection">
       <div class="progress-card">
         HTML
         <div class="progress"><span data-value="90"></span></div>
@@ -358,7 +588,7 @@ window.onload=()=>{
       </div>
     </div>
 
-    <div class="activity">
+    <div class="activity" id="activitySection">
       <div>✔ Completed HTML Basics</div>
       <div>📘 Started JavaScript Roadmap</div>
       <div>🏆 Added CSS Certificate</div>
@@ -371,46 +601,17 @@ window.onload=()=>{
   <button onclick="window.location.href='dashboard.html'">← Back</button>
 </div>
 
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <a href="dashboard.html" class="active" aria-label="Dashboard"><i class="fa fa-house"></i><span>Dashboard</span></a>
+  <a href="skills.html" aria-label="Skill"><i class="fa fa-code"></i><span>Skill</span></a>
+  <a href="roadmap.html" aria-label="Roadmap"><i class="fa fa-map"></i><span>Roadmap</span></a>
+  <a href="settings.html" aria-label="Setting"><i class="fa fa-gear"></i><span>Setting</span></a>
+</nav>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script src="realtime-config.js"></script>
 <script src="realtime-sync.js"></script>
-<script>
-(()=>{
-  const menuButton = document.getElementById("mobileMenuToggle");
-  const overlay = document.getElementById("mobileMenuOverlay");
-  const sidebar = document.querySelector(".sidebar");
-  if(!menuButton || !overlay || !sidebar){
-    return;
-  }
-
-  function setMenuOpen(isOpen){
-    document.body.classList.toggle("menu-open", isOpen);
-    menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
-  }
-
-  menuButton.addEventListener("click", function(){
-    const isOpen = document.body.classList.contains("menu-open");
-    setMenuOpen(!isOpen);
-  });
-
-  overlay.addEventListener("click", function(){
-    setMenuOpen(false);
-  });
-
-  sidebar.querySelectorAll("a").forEach(function(link){
-    link.addEventListener("click", function(){
-      setMenuOpen(false);
-    });
-  });
-
-  window.addEventListener("resize", function(){
-    if(window.innerWidth > 600){
-      setMenuOpen(false);
-    }
-  });
-})();
-</script>
 </body> 
  </html>
 

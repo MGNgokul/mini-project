@@ -33,6 +33,10 @@ body{
   margin:0 auto;
 }
 
+.mobile-topbar{
+  display:none;
+}
+
 .header{
   display:flex;
   justify-content:space-between;
@@ -237,6 +241,10 @@ body{
   text-align:center;
 }
 
+.mobile-bottom-nav{
+  display:none;
+}
+
 .modal{
   position:fixed;
   inset:0;
@@ -301,11 +309,88 @@ body{
 }
 
 @media(max-width:620px){
+  body{
+    padding-bottom:96px;
+    padding-top:18px;
+  }
+  .mobile-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:#ffffff;
+    color:#172230;
+    border:1px solid #dbe4ed;
+    border-radius:16px;
+    padding:12px 14px;
+    margin-bottom:16px;
+    box-shadow:0 8px 20px rgba(15,32,39,0.08);
+  }
+  .mobile-topbar strong{
+    font-size:18px;
+  }
+  .mobile-topbar a{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:#172230;
+    border:1px solid #dbe4ed;
+    background:#f8fbfd;
+    font-size:19px;
+  }
+  .header{
+    display:none;
+  }
+  .summary{
+    grid-template-columns:1fr;
+  }
   .controls{
     grid-template-columns:1fr;
   }
   .form-grid{
     grid-template-columns:1fr;
+  }
+  .mobile-bottom-nav{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:2000;
+    background:#ffffff;
+    border-top:1px solid #dbe4ed;
+    padding:8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    box-shadow:0 -10px 24px rgba(15,32,39,0.08);
+  }
+  .mobile-bottom-nav a{
+    text-decoration:none;
+    color:#607284;
+    border-radius:0;
+    min-height:52px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0;
+  }
+  .mobile-bottom-nav a i{
+    font-size:21px;
+  }
+  .mobile-bottom-nav a span{
+    display:none;
+  }
+  .mobile-bottom-nav a.active{
+    background:transparent;
+    color:#172230;
+  }
+  .back{
+    display:none;
   }
 }
 </style>
@@ -313,6 +398,11 @@ body{
 
 <body>
 <div class="page">
+  <div class="mobile-topbar">
+    <strong>Skill</strong>
+    <a href="profile.html" aria-label="Profile"><i class="fa-regular fa-circle-user"></i></a>
+  </div>
+
   <div class="header">
     <div class="title">
       <h1>Skills Manager</h1>
@@ -371,6 +461,13 @@ body{
     <button class="btn btn-ghost" onclick="window.location.href='dashboard.html'"><i class="fa fa-arrow-left"></i> Back</button>
   </div>
 </div>
+
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <a href="dashboard.html" aria-label="Dashboard"><i class="fa fa-house"></i><span>Dashboard</span></a>
+  <a href="skills.html" class="active" aria-label="Skill"><i class="fa fa-code"></i><span>Skill</span></a>
+  <a href="roadmap.html" aria-label="Roadmap"><i class="fa fa-map"></i><span>Roadmap</span></a>
+  <a href="settings.html" aria-label="Setting"><i class="fa fa-gear"></i><span>Setting</span></a>
+</nav>
 
 <div class="modal" id="skillModal">
   <div class="modal-content">
